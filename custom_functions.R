@@ -100,6 +100,7 @@ bin_and_center <- function(data, var, breaks, ...){
   #   dataout[,"log_mids"] - dataout[mid_row,"log_mids"]
   dataout
 }
+# function to extract slope estimate and CI's
 est_ci <- function(lm_obj){
   out <- c(coef(lm_obj)[2],
     confint(lm_obj)[2],
@@ -107,6 +108,7 @@ est_ci <- function(lm_obj){
   names(out) <- c("estimate", "minCI", "maxCI")
   out
 }
+
 # function to compare slopes####
 compare_slopes <- function(data, dw_range, rsp_var, ...){
   # define breaks widths and mid bins for log2 and 6 equal log bins
@@ -129,9 +131,9 @@ compare_slopes <- function(data, dw_range, rsp_var, ...){
   # NAS_coefs <- coef(NAS_lm)
   # NAS_conf <- confint(NAS_lm)
   # non-normalized abundance
-  AS_lm <- lm(log_count~log_mids_center,
-              data = NAS)
-  AS_out <- est_ci(AS_lm)
+  # AS_lm <- lm(log_count~log_mids_center,
+  #             data = NAS)
+  # AS_out <- est_ci(AS_lm)
   # AS_coefs<- coef(AS_lm)
   # AS_conf <- confint(AS_lm)
   
@@ -142,13 +144,13 @@ compare_slopes <- function(data, dw_range, rsp_var, ...){
   #                         length.out = 7))
   # mid_bin_log_6 <- log10(breaks_log_6[floor(length(breaks_log_6)/2)])
   # ELB6
-  ELB <- bin_and_center(data, var = rsp_var, breaks = breaks_log_6)
+   ELB <- bin_and_center(data, var = rsp_var, breaks = breaks_log_6)
   ELB$log_mids_center <- ELB$log_mids - mid_bin_log_6
-  ELB_lm <- lm(log_count~log_mids_center,
-             data = ELB)
-  # ELB_coef <- coef(ELB_lm)
-  # ELB_conf <- confint(ELB_lm)
-  ELB_out <- est_ci(ELB_lm)
+  # ELB_lm <- lm(log_count~log_mids_center,
+  #            data = ELB)
+  # # ELB_coef <- coef(ELB_lm)
+  # # ELB_conf <- confint(ELB_lm)
+  # ELB_out <- est_ci(ELB_lm)
   ELBn_lm <- lm(log_count_corrected~log_mids_center,
               data = ELB)
   # ELBn_coef <- coef(ELBn_lm)
@@ -185,3 +187,202 @@ compare_slopes <- function(data, dw_range, rsp_var, ...){
   #                     )
   slopes
 }
+
+
+# simulation funciton -----------------------------------------------------
+
+# function to automate simulation runs
+
+# Written 5/25/22
+
+sim_result <- function(n = 1000,
+                       b,
+                       env_gradient,
+                       rep,
+                       m_lower,
+                       m_upper,
+                       distribution){
+  stopifnot(length(b) == length(env_gradient))
+  # simulate values from distribution
+  sim_out <- list()
+  for(i in 1:rep){
+    df <- tibble(
+      known_b = rep(b, each = n),
+      env_gradient = rep(env_gradient, each = n),
+      n = n,
+      distribution = distribution,
+      m_lower = m_lower,
+      m_upper = m_upper,)
+    if(distribution == "PLB"){
+      sample_list <- list()
+      for(n_b in 1:length(b)){
+        sample_list[[n_b]] <- rPLB(n = n,
+                                  xmin = m_lower,
+                                  xmax = m_upper,
+                                  b = b[n_b])
+      }
+      m_sample <- unlist(sample_list)
+}
+    if(distribution == "tpareto"){
+      sample_list <- list()
+      for(n_b in 1:length(b)){
+        sample_list[[n_b]] <- rtruncpareto(n = n,
+                                   lower = m_lower,
+                                   upper = m_upper,
+                                   shape = b[n_b])
+      }
+      m_sample <- unlist(sample_list)
+    }
+    df$m <- m_sample
+    df$rep <- i
+    df$dist = distribution
+    sim_out[[i]] <- df
+  }
+  
+  sim_df <- bind_rows(sim_out)
+  
+  dw_range = range(sim_df$m, na.rm = TRUE)
+  
+  out <- sim_df %>%
+    group_by(rep,
+             known_b,
+             env_gradient,
+             distribution,
+             m_lower,
+             m_upper) %>%
+    nest() %>% 
+    mutate(method_compare = 
+             map(data, # change map() to furrr::future_map()???
+                 compare_slopes,
+                 rsp_var = "m",
+                 dw_range = dw_range)) %>%
+    ungroup() %>%
+    select(-data) %>%
+    unnest(cols = method_compare)
+  out
+}
+
+
+plot_sim <- function(sim_data,
+                     display = FALSE){
+  # plot each regression "rep"
+  main_plot <- ggplot(sim_data,
+         aes(x = env_gradient,
+             y = estimate, 
+             group = rep,
+             color = rep)) +
+    stat_smooth(geom = "line",
+                method = "lm",
+                alpha = 0.15,
+                se = FALSE)+
+    geom_point() +
+    facet_wrap(~name)+
+    labs(title = sim_data$distribution,
+         subtitle = 
+           paste0("m_range =(",
+                  sim_data$m_lower,
+                  ",",
+                  sim_data$m_upper,
+                  ") \nb = (",
+                  min(sim_data$known_b),
+                  ",",
+                  max(sim_data$known_b),
+                        ")")) +
+    theme_bw()
+  
+  ggsave(plot = main_plot,
+         filename = 
+           paste0("figures/",
+                  substitute(sim_data),
+                  "_main.png"))
+  
+if(sim_data$distribution[1] == "PLB"){
+  estimate_density <- sim_data %>%
+    ggplot(aes(x = estimate,
+               fill = name)) +
+    geom_density(alpha = 0.5) +
+    theme_bw() +
+    facet_wrap(~known_b,
+               scales = "free") +
+    geom_vline(aes(xintercept = known_b),
+               size = 1,
+               alpha = 0.75,
+               color = "black")+
+    scale_fill_viridis_d(option = "plasma") +
+    labs(title = sim_data$distribution,
+         x = "slope estimate") +
+    NULL}
+  
+  if(sim_data$distribution[1] == "tpareto"){
+    estimate_density <- sim_data %>%
+      mutate(trans_b = known_b * -1 -1) %>%
+      ggplot(aes(x = estimate,
+                 fill = name)) +
+      geom_density(alpha = 0.5) +
+      theme_bw() +
+      facet_wrap(~trans_b,
+                 scales = "free") +
+      geom_vline(aes(xintercept = (known_b*-1)-1),
+                 size = 1,
+                 alpha = 0.75,
+                 color = "black")+
+      scale_fill_viridis_d(option = "plasma") +
+      labs(title = sim_data$distribution,
+           subtitle = "(Shape parameter * -1) -1",
+           x = "slope estimate") +
+      NULL}
+  
+  ggsave(plot = estimate_density,
+         filename = 
+           paste0("figures/",
+                  substitute(sim_data),
+                  "_est_b_density.png"))
+  
+  # distribution of slope estimates?
+  relationship_estimate <- sim_data %>%
+    group_by(rep, name) %>%
+    nest() %>%
+    mutate(lm_mod =
+             map(data,
+                 ~lm(estimate ~ env_gradient, data = .x))) %>%
+    mutate(tidied = map(lm_mod, broom::tidy)) %>%
+    unnest(tidied) %>%
+    filter(term == "env_gradient") %>%
+    select(-data, -lm_mod, -statistic)
+  
+  slope_distribution <- relationship_estimate %>%
+    group_by(name) %>%
+    summarize(mu_slope = mean(estimate, na.rm = TRUE),
+              sd_slope = sd(estimate),
+              p25 = quantile(estimate, probs = 0.25),
+              p50 = quantile(estimate, probs = 0.5),
+              p975 = quantile(estimate, probs = 0.975))
+  
+  write_csv(slope_distribution,
+            file = paste0("results/",
+                          substitute(sim_data),
+                          ".csv"))
+  # plot density of relationship estimate
+  relationship_density <- relationship_estimate %>%
+    ggplot(aes(x = estimate, fill = name)) + 
+    geom_density(alpha = 0.5) +
+    theme_bw() +
+    scale_fill_viridis_d(option = "plasma") +
+    labs(x = "relationship estimate") +
+    NULL
+  ggsave(plot = relationship_density,
+         filename = 
+           paste0("figures/",
+                  substitute(sim_data),
+                  "_relationship_density.png"))
+  
+  if(display == TRUE){
+    return(
+      list(
+        slope_distribution,
+        main_plot,
+        estimate_density,
+        relationship_density))
+  }
+}
+
