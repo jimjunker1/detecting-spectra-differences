@@ -30,14 +30,132 @@ Despite the increasing consensus of MLE analyses, no study has yet been conducte
 1. Simulate data
   + sizeSpectra::rPLB(n = 1000, b, xmin, xmax)
   + b = c(-1.5, -2, -2.5); b = c(-1.9, -2, -2.1)
+  + hypothetical environmental gradient (x) = c(-1, 0, 1) paired with b parameters above
+  + Repeat simulation 1000 times (reps)
   + xmin and xmax based on macroinvertebrate sizes
   + Also use Edwards values to test sensitivity
-  + Simulate from other distributions? rlnorm(), rweibull() etc.?
+  + Simulate from other distributions? rlnorm(), rweibull() etc.? --> Not done yet. Maybe leave out untill reviewers ask for it??
 2. Analyze simulated data
   + MLE methods from Edwards et al. 2018
-  + log2 bins - Pomeranz, Blanchard, etc
-  + ELB - 6, 8, 10 bins. Woodward's group generally uses 6 equal bins
+  + NAS = log2 bins, normalized - Pomeranz, Blanchard, etc
+  + ELBn = 6 equal log bins, normalized. Woodward's group generally uses 6 equal bins. 
   + Others from Edwards' 8 methods?
 3. assessment
   + which methods provide best estimate of *real* slopes?
   + what is *relative* difference in estimates? i.e. do all methods result in a relative change of 0.5 between data "groups"?
+  + Do methods accurately detect no relationship across "sites"?
+  + Plot estimated CSS parameter for each rep
+  + OLS regression for each rep: est_css_param ~ env_gradient
+4. Sensitivity
+  + Change range of "x"?
+  + Change range of "m" body sizes
+  + More "sites"
+5. Empirical data - do conclusions of previous studies vary when using different methods?
+  + AMD data from Pomeranz et al. 2018
+  + NEON Data from Pomeranz et al. 2022
+  
+## Results
+
+Figures are supposed to come after this, not before... Latex??
+
+![Fig 1. Distribution of CSS parameter. Vertical line is the known parameter wich describes the bounded power law distribution from which the body size estimates were sampled.](figures/PLB_sim_est_b_density.png)
+\newpage
+
+![Fig 2. OLS Regression lines for each rep across the hypothetical environmental gradient. Body sizes were sampled such that the CSS parameter should change by 0.5 units across each unit of x.](figures/PLB_sim_main.png)
+
+\newpage
+
+![Fig 3. Density distribution for the estimated relationship across the hypothetical environmental gradient. the MLE method is centered at 0.5, which is the "known" relationship simulated in the main analysis. Both of the binning methods underestimate the hypothetical relationship.](figures/PLB_sim_relationship_density.png)
+
+\newpage
+
+### No relationship
+
+![Fig 4. Distribution of CSS parameter. Vertical line is the known parameter wich describes the bounded power law distribution from which the body size estimates were sampled.](figures/PLB_static_b_est_b_density.png)
+\newpage
+
+![Fig 5. OLS Regression lines for each rep across the hypothetical environmental gradient. Body sizes were sampled such that the CSS parameter should not change across values of x.](figures/PLB_static_b_main.png)
+
+\newpage
+
+![Fig 6. Density distribution for the estimated relationship across the hypothetical environmental gradient. All methods are centered at 0, which is the "known" relationship simulated in this analysis. Both of the binning methods have a much wider distribution than the MLE method.](figures/PLB_static_b_relationship_density.png)
+
+
+### Small variation of CSS over environmental gradient
+
+\newpage
+
+![Fig 7. Distribution of CSS parameter. Vertical line is the known parameter wich describes the bounded power law distribution from which the body size estimates were sampled.](figures/PLB_sim_small_est_b_density.png)
+
+\newpage
+
+![Fig 8. OLS Regression lines for each rep across the hypothetical environmental gradient. Body sizes were sampled such that the CSS parameter should change by 0.1 units across values of x.](figures/PLB_sim_small_main.png)
+\newpage
+
+![Fig 9. Density distribution for the estimated relationship across the hypothetical environmental gradient. All methods are centered at -0.1, which is the "known" relationship simulated in this analysis. Both of the binning methods have a much wider distribution than the MLE method, and occasionally result in a positive relationship.](figures/PLB_sim_small_relationship_density.png)
+\newpage
+
+
+## Empirical data
+
+### Acid Mine Drainage (AMD) gradient
+
+The data of Pomeranz et al. 2018 was re-analyzed using the three methods presented here. The goal here was to see if the main conclusions reached would vary based on methodologies. 
+
+![Fig 10. CSS parameter estimates are positively related to AMD stress. The conclusions are in agreement with Pomeranz et al. 2018, and are not dependent on methodology used.](figures/AMD_plot.png)
+
+\newpage
+
+![Fig 11. Mean (+- SD) estimated slope coefficient relating change in CSS parameter across gradient of AMD stress.](figures/amd_relationship.png)
+
+\newpage
+
+### Environmental Temperature Gradient
+
+![Fig 10. CSS parameter estimates are weakly negatively related to AMD stress. The conclusions are in agreement with Pomeranz et al. 2022, and are not dependent on methodology used.](figures/NEON_plot.png)
+
+\newpage
+
+![Fig 11. Mean (+- SD) estimated slope coefficient relating change in CSS parameter across gradient of environmental temperature across the NEON sites.](figures/neon_relationship.png)
+
+## Conclusions
++ MLE offers the best estimates of individual CSS parameters, and the best estimate of their relative change across hypothetical gradients
++ Normalized binning methods generally overestimate CSS parameters (i.e., "shallower" slopes than expected)
++ Normalized Binning methods (ELBn, NAS) *generally* correctly estimate the relationship across hypothetical and empirical gradients. 
++ Need to determine if it's possible to correctly propagate error / systematic bias in estimates, but the present study indicates that comparing the *relative* changes across gradients in different studies should be reasonable. 
+
+## SI
+
+Sensitivity analyses. Need to come back to these and add captions and think about implications
+
+### Large X (-100, 100)
+
+![Large x-range.](figures/PLB_large_x_est_b_density.png)
+
+![Large x-range.](figures/PLB_large_x_main.png)
+
+\newpage
+
+![Large x-range.](figures/PLB_large_x_relationship_density.png)
+
+\newpage
+
+### Small body size range (m) (1, 100)
+![Small (M) x-range.](figures/PLB_small_m_est_b_density.png)
+
+\newpage
+
+![Small (M) x-range.](figures/PLB_small_m_main.png)
+
+![Small (M) x-range.](figures/PLB_small_m_relationship_density.png)
+\newpage
+
+![10 sites.](figures/PLB_10_sites_est_b_density.png)
+
+\newpage
+
+![10 sites.](figures/PLB_10_sites_main.png)
+
+\newpage
+
+![10 sites.](figures/PLB_10_sites_relationship_density.png)
