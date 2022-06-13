@@ -1,8 +1,14 @@
 # custom functions
 # these are largely copied from Pomeranz et al. 2018 Freshwater Biology and Pomeranz et al. 2022 Global Change Biology
-# copied 5/24/22 --> go through these and make sure doing what I think I remember them doing. 
+# copied 5/24/22 --> go through these and make sure doing what I think I remember them doing.
+
+# These functions require the tidyverse (Wickham et al.) and sizeSpectra (Edwards et al. 207, 2020)
 
 # MLE in tidy format
+# this is a wrapper function I wrote to be able to use the MLE functions from size Spectra, but used on data in the tidy format. 
+# it was designed to specifically work with list-columns of the data you want to analyze. 
+# I make no guarantees on it's functionality 
+
 MLE_tidy <- function(df, rsp_var){
   # define variables
   x <- df[[rsp_var]]
@@ -16,8 +22,11 @@ MLE_tidy <- function(df, rsp_var){
   
   # non-linear minimization  
   PLB.minLL = nlm(negLL.PLB, 
-                  p = PL.bMLE, x = x, n = length(x), 
-                  xmin = xmin, xmax = xmax,
+                  p = PL.bMLE,
+                  x = x,
+                  n = length(x), 
+                  xmin = xmin,
+                  xmax = xmax,
                   sumlogx = sum.log.x)
   
   # estimate for b
@@ -203,11 +212,14 @@ sim_result <- function(n = 1000,
                        m_upper,
                        distribution){
   stopifnot(length(b) == length(env_gradient))
+  known_relationship <- -(max(b) - min(b)) / 
+    (max(env_gradient) - min(env_gradient)) 
   # simulate values from distribution
   sim_out <- list()
   for(i in 1:rep){
     df <- tibble(
       known_b = rep(b, each = n),
+      known_relationship = known_relationship,
       env_gradient = rep(env_gradient, each = n),
       n = n,
       distribution = distribution,
@@ -246,13 +258,18 @@ sim_result <- function(n = 1000,
   out <- sim_df %>%
     group_by(rep,
              known_b,
+             known_relationship,
              env_gradient,
              distribution,
              m_lower,
              m_upper) %>%
     nest() %>% 
     mutate(method_compare = 
-             map(data, # change map() to furrr::future_map()???
+             map(data, 
+                 # added the possibly() function on 6/12/2022
+                 # small sample size (n=100) was having a hard time with MLE estimates for steep (b = -2.5) distributions
+                 # added this so that it "skips" problematic iterations instead of stopping. 
+                 # removed 6/13 - work this out later
                  compare_slopes,
                  rsp_var = "m",
                  dw_range = dw_range)) %>%
@@ -264,7 +281,8 @@ sim_result <- function(n = 1000,
 
 
 plot_sim <- function(sim_data,
-                     display = FALSE){
+                     display = FALSE,
+                     adjust = 2){
   # plot each regression "rep"
   main_plot <- ggplot(sim_data,
          aes(x = env_gradient,
@@ -298,15 +316,16 @@ plot_sim <- function(sim_data,
   
 if(sim_data$distribution[1] == "PLB"){
   estimate_density <- sim_data %>%
-    ggplot(aes(x = estimate,
+    ggplot(aes(y = ..scaled..,
+               x = estimate,
                fill = name)) +
-    geom_density(alpha = 0.5) +
+    geom_density(alpha = 0.5,
+                 adjust = adjust) +
     theme_bw() +
-    facet_wrap(~known_b,
-               scales = "free") +
+    facet_wrap(~known_b) +
     geom_vline(aes(xintercept = known_b),
                size = 1,
-               alpha = 0.75,
+               linetype = "dashed",
                color = "black")+
     scale_fill_viridis_d(option = "plasma") +
     labs(title = sim_data$distribution,
@@ -316,15 +335,16 @@ if(sim_data$distribution[1] == "PLB"){
   if(sim_data$distribution[1] == "tpareto"){
     estimate_density <- sim_data %>%
       mutate(trans_b = known_b * -1 -1) %>%
-      ggplot(aes(x = estimate,
+      ggplot(aes(y = ..scaled..,
+                 x = estimate,
                  fill = name)) +
-      geom_density(alpha = 0.5) +
+      geom_density(alpha = 0.5,
+                   adjust = adjust) +
       theme_bw() +
-      facet_wrap(~trans_b,
-                 scales = "free") +
+      facet_wrap(~trans_b) +
       geom_vline(aes(xintercept = (known_b*-1)-1),
                  size = 1,
-                 alpha = 0.75,
+                 linetype = "dashed",
                  color = "black")+
       scale_fill_viridis_d(option = "plasma") +
       labs(title = sim_data$distribution,
@@ -340,7 +360,7 @@ if(sim_data$distribution[1] == "PLB"){
   
   # distribution of slope estimates?
   relationship_estimate <- sim_data %>%
-    group_by(rep, name) %>%
+    group_by(rep, name, known_relationship) %>%
     nest() %>%
     mutate(lm_mod =
              map(data,
@@ -353,23 +373,30 @@ if(sim_data$distribution[1] == "PLB"){
   slope_distribution <- relationship_estimate %>%
     group_by(name) %>%
     summarize(mu_slope = mean(estimate, na.rm = TRUE),
-              sd_slope = sd(estimate),
-              p25 = quantile(estimate, probs = 0.25),
-              p50 = quantile(estimate, probs = 0.5),
-              p975 = quantile(estimate, probs = 0.975))
+              sd_slope = sd(estimate, na.rm = TRUE),
+              p25 = quantile(estimate, probs = 0.25, na.rm = TRUE),
+              p50 = quantile(estimate, probs = 0.5, na.rm = TRUE),
+              p975 = quantile(estimate, probs = 0.975, na.rm = TRUE))
   
   write_csv(slope_distribution,
             file = paste0("results/",
                           substitute(sim_data),
                           ".csv"))
   # plot density of relationship estimate
-  relationship_density <- relationship_estimate %>%
-    ggplot(aes(x = estimate, fill = name)) + 
-    geom_density(alpha = 0.5) +
+    relationship_density <- relationship_estimate %>%
+    ggplot(aes(y = ..scaled..,
+               x = estimate, 
+               fill = name)) + 
+    geom_density(alpha = 0.5,
+                 adjust = adjust) +
+    geom_vline(aes(xintercept = known_relationship),
+               linetype = "dashed",
+               size = 1)+
     theme_bw() +
     scale_fill_viridis_d(option = "plasma") +
     labs(x = "relationship estimate") +
     NULL
+    
   ggsave(plot = relationship_density,
          filename = 
            paste0("figures/",
