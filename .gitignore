@@ -2,6 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+
 figures/
 data_sim/
 results/
+ignore/

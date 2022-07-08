@@ -40,6 +40,7 @@ rep = 1000
 m_lower = 0.0026
 m_upper = 1.2e3
 
+debugonce(sim_result)
 PLB_sim <- sim_result(n = 1000,
                       b = lambda,
                       env_gradient = env_gradient,
@@ -51,6 +52,10 @@ PLB_sim <- sim_result(n = 1000,
 saveRDS(PLB_sim, file = paste0("data_sim/",
                                substitute(PLB_sim),
                                "_dat.rds"))
+
+PLB_sim = readRDS(file = paste0("data_sim/",
+                                substitute(PLB_sim),
+                                "_dat.rds"))
 plot_sim(PLB_sim)
 #rm(PLB_sim)
 
