@@ -81,11 +81,8 @@ In order to investigate the performance of commonly used methods, we simulate bo
 $$f(M) = CM^\lambda, M_{min} \le M \le M_{max} $$
 
 $M_{min} = 0.0026$ and $M_{max} = 1.2 *10^3$. These values are based on empirical body sizes of stream benthic communities reported in Pomeranz et al. (2020)[@pomeranz2020]. Our results are not dependent on the range of body sizes, and we show the results of other ranges in the supplemental information.
-<<<<<<< HEAD
 
 For the main analysis, presented here, we sampled $n = 1000$ body sizes from distributions described by five different $\lambda$'s: (-1.5, -1.75, -2.00, -2.25, -2.5), such that our model for $\lambda$ is:
-=======
->>>>>>> 2d12beb7fa77e0f801dc273bb2867d5be95f02e6
 
 $$\lambda = Norm(\alpha -0.5X, \sigma)$$
 
