@@ -5,5 +5,10 @@
 figures/
 data_sim/
 results/
+<<<<<<< HEAD
 Pomeranz_simulation_jsw.pdf
 neon_data.csv
+=======
+
+ignore/
+>>>>>>> 2d12beb7fa77e0f801dc273bb2867d5be95f02e6
