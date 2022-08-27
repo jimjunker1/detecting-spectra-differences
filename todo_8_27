@@ -1,0 +1,8 @@
+to do 8/27
+re run simulation on dell - some of the simulation csvs, results, and figures got lost in the big branch merge. Puch those files to git so I can get them on this machine
+
+update neon plot to new format
+
+Change geom_density adjust = 1
+main results - show density plots of estimated relationship
+SI - include "all regression" plots

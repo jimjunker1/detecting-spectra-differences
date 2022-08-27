@@ -282,7 +282,7 @@ sim_result <- function(n = 1000,
 
 plot_sim <- function(sim_data,
                      display = FALSE,
-                     adjust = 2){
+                     adjust = 1){
   # plot each regression "rep"
   main_plot <- ggplot(sim_data,
          aes(x = env_gradient,

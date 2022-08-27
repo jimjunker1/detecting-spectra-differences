@@ -61,17 +61,21 @@ amd_relationship %>%
 
 # plot the mean \pm STD.E of the estimated relationship across the gradient based on method used. 
 amd_relationship %>%
-  ggplot(aes(y = estimate, 
-             ymin = estimate - std.error, 
-             ymax = estimate + std.error,
-             x = name,
+  ggplot(aes(x = estimate, 
+             xmin = estimate - std.error, 
+             xmax = estimate + std.error,
+             y = name,
              color = name)) +
   geom_pointrange()+
   theme_bw() +
-  labs(y = "Relationship estimate",
-       title = "Mean +/- Std. Error Beta across AMD gradient")
+  labs(x = "Relationship estimate",
+       y = "Method",
+       title = "Mean +/- Std. Error Beta across AMD gradient") +
+  theme(legend.position="none")
 
-ggsave("figures/amd_relationship.png")
+ggsave("figures/amd_relationship.png",
+       height = 3,
+       width = 5)
 
 
 
