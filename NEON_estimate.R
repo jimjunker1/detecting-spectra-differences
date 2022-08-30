@@ -59,12 +59,19 @@ neon_relationship %>%
   write_csv("results/NEON_estimates.csv")
 
 neon_relationship %>%
-  ggplot(aes(y = estimate, 
-             ymin = estimate - std.error, 
-             ymax = estimate + std.error,
-             x = name,
-             color = name)) +
+  mutate(Model = factor(name,
+                        levels = 
+                          c("MLE",
+                            "ELBn", 
+                            "NAS"))) %>%
+  ggplot(aes(x = estimate, 
+             xmin = estimate - std.error, 
+             xmax = estimate + std.error,
+             y = Model,
+             color = Model)) +
   geom_pointrange()+
+  scale_fill_manual(
+    values = c("#019AFF", "#FF914A", "#FF1984" )) +
   theme_bw() +
   labs(y = "Relationship estimate",
        title = "Mean +/- Std. Error Beta across Neon")

@@ -27,13 +27,20 @@ dw_range = range(amd_dat$dw, na.rm = TRUE)
   unnest(cols = method_compare))
 
 # plot parameter estimates (slope or exponent) across AMD gradient
-ggplot(amd_result,
-       aes(x = pca1,
+amd_result %>%
+  mutate(Model = factor(name,
+                        levels = 
+                          c("MLE",
+                            "ELBn", 
+                            "NAS"))) %>%
+  ggplot(aes(x = pca1,
            y = estimate,
-           color = name))+
+           color = Model))+
   geom_point() +
   stat_smooth(method = "lm",
               se = FALSE)+
+  scale_color_manual(
+    values = c("#019AFF", "#FF914A", "#FF1984" )) +
   theme_bw() +
   labs(title = "Change in exponent across an AMD gradient", 
        x = "AMD gradient (PCA)",
@@ -61,12 +68,19 @@ amd_relationship %>%
 
 # plot the mean \pm STD.E of the estimated relationship across the gradient based on method used. 
 amd_relationship %>%
+  mutate(Model = factor(name,
+                        levels = 
+                          c("MLE",
+                            "ELBn", 
+                            "NAS"))) %>%
   ggplot(aes(x = estimate, 
              xmin = estimate - std.error, 
              xmax = estimate + std.error,
-             y = name,
-             color = name)) +
+             y = Model,
+             color = Model)) +
   geom_pointrange()+
+  scale_color_manual(
+    values = c("#019AFF", "#FF914A", "#FF1984" )) +
   theme_bw() +
   labs(x = "Relationship estimate",
        y = "Method",
