@@ -315,22 +315,44 @@ plot_sim <- function(sim_data,
                   "_main.png"))
   
 if(sim_data$distribution[1] == "PLB"){
+  #### this is the old plot, keeping for now ####
+  # estimate_density <- sim_data %>%
+  #   ggplot(aes(y = ..scaled..,
+  #              x = estimate,
+  #              fill = name)) +
+  #   geom_density(alpha = 0.5,
+  #                adjust = adjust) +
+  #   theme_bw() +
+  #   facet_wrap(~known_b) +
+  #   geom_vline(aes(xintercept = known_b),
+  #              size = 1,
+  #              linetype = "dashed",
+  #              color = "black")+
+  #   scale_fill_viridis_d(option = "plasma") +
+  #   labs(title = sim_data$distribution,
+  #        x = "slope estimate") +
+  #   NULL
+  #### New 8/30/22 "halfeye" plot
   estimate_density <- sim_data %>%
-    ggplot(aes(y = ..scaled..,
-               x = estimate,
-               fill = name)) +
-    geom_density(alpha = 0.5,
-                 adjust = adjust) +
+    mutate(Model = factor(name,
+                          levels = 
+                            c("MLE",
+                              "ELBn", 
+                              "NAS"))) %>%
+    ggplot(
+      aes(x = estimate, 
+          y = Model,
+          fill = Model)) +
+    stat_halfeye(.width = c(0.66, 0.95)) +
+    scale_fill_manual(
+      values = c("#019AFF", "#FF914A", "#FF1984" )) +
     theme_bw() +
-    facet_wrap(~known_b) +
     geom_vline(aes(xintercept = known_b),
-               size = 1,
-               linetype = "dashed",
-               color = "black")+
-    scale_fill_viridis_d(option = "plasma") +
-    labs(title = sim_data$distribution,
-         x = "slope estimate") +
-    NULL}
+               linetype = "dashed") +
+    labs(
+      x = "Lambda estimate") +
+    facet_wrap(~known_b)
+  }
   
   if(sim_data$distribution[1] == "tpareto"){
     estimate_density <- sim_data %>%
@@ -383,20 +405,42 @@ if(sim_data$distribution[1] == "PLB"){
                           substitute(sim_data),
                           ".csv"))
   # plot density of relationship estimate
-    relationship_density <- relationship_estimate %>%
-    ggplot(aes(y = ..scaled..,
-               x = estimate, 
-               fill = name)) + 
-    geom_density(alpha = 0.5,
-                 adjust = adjust) +
-    geom_vline(aes(xintercept = known_relationship),
-               linetype = "dashed",
-               size = 1)+
+  # old relationship distribution plot ####  
+  # relationship_density <- relationship_estimate %>%
+    # ggplot(aes(y = ..scaled..,
+    #            x = estimate, 
+    #            fill = name)) + 
+    # geom_density(alpha = 0.5,
+    #              adjust = adjust) +
+    # geom_vline(aes(xintercept = known_relationship),
+    #            linetype = "dashed",
+    #            size = 1)+
+    # theme_bw() +
+    # scale_fill_viridis_d(option = "plasma") +
+    # labs(x = "relationship estimate") +
+    # NULL
+  # new 8/30/22 relationship halfeye plot ####
+  relationship_density <- relationship_estimate %>%
+    mutate(Model = factor(name,
+                          levels = 
+                            c("MLE",
+                              "ELBn", 
+                              "NAS"))) %>%
+    ggplot(aes(x = estimate, 
+               y = Model,
+               fill = Model))+
+    stat_halfeye(.width = c(0.66, 0.95)) +
+    scale_fill_manual(
+      values = c("#019AFF",
+                 "#FF914A",
+                 "#FF1984" )) +
     theme_bw() +
-    scale_fill_viridis_d(option = "plasma") +
-    labs(x = "relationship estimate") +
+    geom_vline(
+      aes(xintercept = known_relationship),
+               linetype = "dashed") +
+    labs(x = "Relationship estimate") +
     NULL
-    
+  
   ggsave(plot = relationship_density,
          filename = 
            paste0("figures/",

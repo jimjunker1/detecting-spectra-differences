@@ -21,6 +21,7 @@ set.seed(2806)
 
 library(tidyverse)
 library(sizeSpectra) #bounded power law and MLE functions
+library(tidybayes) # for nicer looking plots
 source("custom_functions.R")
 
 # Simulation and summary --------------------------------------------------
