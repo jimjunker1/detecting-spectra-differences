@@ -27,14 +27,23 @@ dw_range = range(neon_dat$dw, na.rm = TRUE)
     select(-data) %>%
     unnest(cols = method_compare))
 
-ggplot(neon_result,
-       aes(x = mat.c,
+neon_result %>%
+  mutate(Model = factor(name,
+                        levels = 
+                          c("MLE",
+                            "ELBn", 
+                            "NAS"))) %>%
+ggplot(aes(x = mat.c,
            y = estimate,
-           color = name))+
+           color = Model))+
   geom_point() +
   stat_smooth(method = "lm",
               se = FALSE)+
   theme_bw() +
+  scale_color_manual(
+    values = c("#019AFF",
+               "#FF914A",
+               "#FF1984" )) +
   labs(title = "Change in exponent across NEON", 
        x = "Mean annual air temp",
        y = "Slope/exponent estimate")
@@ -70,7 +79,7 @@ neon_relationship %>%
              y = Model,
              color = Model)) +
   geom_pointrange()+
-  scale_fill_manual(
+  scale_color_manual(
     values = c("#019AFF", "#FF914A", "#FF1984" )) +
   theme_bw() +
   labs(y = "Relationship estimate",
