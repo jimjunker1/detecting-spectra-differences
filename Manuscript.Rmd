@@ -136,20 +136,18 @@ Interestingly, there was an interactive effect of the estimate accuracy between 
 
 All of the methods performed similarly when there was no relationship across the hypothetical gradient. The mean $\beta_1$ estimates for all three methods ranged from -0.0005 to 0.0002. However, once again, the SD for the NAS and ELBn methods were ~3x larger than the SD for the MLE method. 
 
-![Individual regression estimates when no relationship exists across the hypothetical environmental gradient. The methods are separated by rows, and the left and right column show relationships which were non-significant and significant, respectively. The individual regressions coefficients are colored-coded to indicate positive and negative relationship estimates. ](figures/static_b_lambda_spaghetti.png)
+![Distribution of all lambda estimates across sites when there is no relationaship. The coeficient estimates for the binning methods tend to be shallower and have wider distributions than the MLE method.  ](figures/PLB_static_b_est_b_density.png)
+
+![Individual regression estimates when no relationship exists across the hypothetical environmental gradient. The methods are separated by rows. The median for all methocs is approximately zero, but the distribution for the MLE method is narrower than the two binning methods. ](figures/PLB_static_b_relationship_density.png)
 
 ## Small variation in lambda
 
 The performance of all methods to detect small variation in the $\lambda$ parameter (between -1.9 to -2.1) across the environmental gradient was also investigated. The mean $\beta_1$ coefficient estimates ranged from -0.10 to -0.09. The mean estimate for the MLE method was -0.1, which exaclty matched the value for the hypothetical relationship. Likewise, the upper 97.5 percentile of the distribution was below 0, meaning that most of the estimates had the correct sign. In contrast, the upper 97.5 percentile for both the NAS and ELBn methods were greater than 0 at 0.027 and 0.052, respectively. (Figure 4).
 
-![Distribution of the estimated relationship for each method. Here, $\lambda$ varied from -1.9 to -2.1, with a known relationaship of -0.1 across the gradient indicated by the dashed vertical line.](figures/PLB_sim_small_relationship_density.png)
+![Distribution of the estimated relationship for each method. Here, $\lambda$ varied from -1.9 to -2.1, with a known relationaship of -0.1 across the gradient indicated by the dashed vertical line. The distribution of relationship estimates was approximately centered at the known relationship for all methods, with a narrower distribution observed for the MLE estimates. ](figures/PLB_sim_small_relationship_density.png)
 
-
-
-![Linear regressions across the hypothetical gradient when lambda varies from -1.9 to -2.1. Each method is displayed in the rows, and the left colum shows the non-significant estimates, while the right column shows the relationships which were signficant ($\beta_1$ coefficient p-value \< 0.05). The colors indicate when the beta coefficient estimate was negative (pink) and when it was positive (purple).](figures/small_lambda_spaghetti.png)
 
 Once again, the SD for both of the binning methods were $\ge$ 2.8 times that of the MLE method.
-
 
 
 ## Empirical data
@@ -180,7 +178,7 @@ We found generally less variability in the relationship estimates across a gradi
 
 On average, the relationship across the gradient was under estimated, but by nearly an order of magnitude less than when simulating across steeper values of $\lambda$. Differences between known and estimated relationship coefficients: MLE -0.0007 ($\pm$ 0.0079); ELBn -0.0058 ($\pm$ 0.0177); NAS -0.0251 ($\pm$ 0.0124).
 
-![Distribution of relationship coefficient estimates. Vertical line is the known relationship. All methods under estimate the value, but the mean magnitude and distribution of values is greater for the ELBn and NAS methods.](figures/shallow_lambda_relationship_density.png)
+![Distribution of relationship coefficient estimates. Vertical line is the known relationship. All methods under estimate the value, but the mean magnitude and distribution of values is greater for the ELBn and NAS methods.](figures/PLB_shallow_lambda_relationship_density.png)
 
 # Discussion
 

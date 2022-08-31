@@ -351,7 +351,8 @@ if(sim_data$distribution[1] == "PLB"){
                linetype = "dashed") +
     labs(
       x = "Lambda estimate") +
-    facet_wrap(~known_b)
+    facet_wrap(~known_b,
+               scales = "free_x")
   }
   
   if(sim_data$distribution[1] == "tpareto"){

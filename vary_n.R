@@ -6,7 +6,7 @@ source("custom_functions.R")
 
 # read in datasets with variable sample size, n
 # All other params are as in main analysis
-n100 <- readRDS("data_sim/PLB_sim_n100_dat.rds")
+n200 <- readRDS("data_sim/PLB_sim_n200_dat.rds")
 n500 <- readRDS("data_sim/PLB_sim_n500_dat.rds")
 n5000 <- readRDS("data_sim/PLB_sim_n5000_dat.rds")
 n10000 <- readRDS("data_sim/PLB_sim_n10000_dat.rds")
@@ -18,15 +18,15 @@ n1000$n <- 1000
 # Filter out all reps which have an estimate == NA
 
 # make vector of reps which have an NA value for the estimate
-rep_na <- n100$rep[which(is.na(n100$estimate))]
+#rep_na <- n100$rep[which(is.na(n100$estimate))]
 
 # filter out all the reps with NA values
 # the !rep means (reps which do not match values in rep_na)
-PLB_sim_n100 <- n100 %>%
-  filter(!rep %in% rep_na)
+#PLB_sim_n100 <- n100 %>%
+#  filter(!rep %in% rep_na)
 
 # combine all data sets
-dat <- bind_rows(n100, n500, n5000, n10000, n1000)
+dat <- bind_rows(n200, n500, n5000, n10000, n1000)
 
 # How does the lambda estimate vary by sample size?
 ggplot(dat, aes(x = n, y = estimate, color = name)) +
@@ -45,23 +45,46 @@ ggsave("figures/lambda_n_5_sites.png", width = 8, height = 8)
 
 
 # how does estimate of lambda vary with sample size?
-ggplot(dat,
-       aes(x = estimate,
-           y = ..scaled..,
-           fill = name)) +
-  geom_density(alpha = 0.5,
-               adjust = 2) +
-  facet_wrap(n ~ known_b,
-             ncol = 5,
-             labeller = label_both) +
-  geom_vline(aes(xintercept = known_b),
-             size = 1,
-             alpha = 0.75,
-             color = "black")+
-  scale_fill_viridis_d(option = "plasma") +
-  labs(title = "Sample size and known b",
-       x = "slope estimate") +
+# ggplot(dat,
+#        aes(x = estimate,
+#            y = ..scaled..,
+#            fill = name)) +
+#   geom_density(alpha = 0.5,
+#                adjust = 2) +
+#   facet_wrap(n ~ known_b,
+#              ncol = 5,
+#              labeller = label_both) +
+#   geom_vline(aes(xintercept = known_b),
+#              size = 1,
+#              alpha = 0.75,
+#              color = "black")+
+#   scale_fill_viridis_d(option = "plasma") +
+#   labs(title = "Sample size and known b",
+#        x = "slope estimate") +
+#   theme_bw() +
+#   NULL
+dat %>%
+  mutate(Model = factor(name,
+                        levels = 
+                          c("MLE",
+                            "ELBn", 
+                            "NAS"))) %>%
+  ggplot(
+    aes(x = estimate, 
+        y = Model,
+        fill = Model)) +
+  stat_halfeye(.width = c(0.66, 0.95)) +
+  scale_fill_manual(
+    values = c("#019AFF", "#FF914A", "#FF1984" )) +
   theme_bw() +
+  geom_vline(aes(xintercept = known_b),
+             linetype = "dashed") +
+  labs(
+    x = "Lambda estimate") +
+  facet_wrap(n~known_b,
+             ncol = 5,
+             labeller = label_both,
+             scales = "free_x") +
   NULL
 
 ggsave(paste0("figures/", 
@@ -105,21 +128,45 @@ relationship_estimate <- dat %>%
   filter(term == "env_gradient") %>%
   select(-data, -lm_mod, -statistic)
 
+# old plot ####
+# relationship_estimate %>%
+#   ggplot(aes(y = ..scaled..,
+#              x = estimate,
+#              fill = name)) + 
+#   geom_density(alpha = 0.5,
+#                adjust = 2) +
+#   geom_vline(xintercept = -0.5,
+#              size = 1,
+#              linetype = "dashed") +
+#   theme_bw() +
+#   scale_fill_viridis_d(option = "plasma") +
+#   labs(x = "relationship estimate") +
+#   facet_wrap(~n,
+#              labeller = label_both,
+#              ncol = 1) +
+#   NULL
+# new plot 8/30/22 ####
 relationship_estimate %>%
-  ggplot(aes(y = ..scaled..,
-             x = estimate,
-             fill = name)) + 
-  geom_density(alpha = 0.5,
-               adjust = 2) +
-  geom_vline(xintercept = -0.5,
-             size = 1,
-             linetype = "dashed") +
+  mutate(Model = factor(name,
+                      levels = 
+                        c("MLE",
+                          "ELBn", 
+                          "NAS"))) %>%
+  ggplot(
+    aes(x = estimate, 
+        y = Model,
+        fill = Model)) +
+  stat_halfeye(.width = c(0.66, 0.95)) +
+  scale_fill_manual(
+    values = c("#019AFF", "#FF914A", "#FF1984" )) +
   theme_bw() +
-  scale_fill_viridis_d(option = "plasma") +
-  labs(x = "relationship estimate") +
+  geom_vline(xintercept = -0.5,
+                          size = 1,
+                          linetype = "dashed")  +
+  labs(
+    x = "Lambda estimate") +
   facet_wrap(~n,
-             labeller = label_both,
-             ncol = 1) +
+             scales = "free_x") +
   NULL
 
 ggsave(filename = 
