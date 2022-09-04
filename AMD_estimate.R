@@ -44,9 +44,13 @@ amd_result %>%
   theme_bw() +
   labs(title = "Change in exponent across an AMD gradient", 
        x = "AMD gradient (PCA)",
-       y = "Slope/exponent estimate")
+       y = "Slope/exponent estimate") +
+  theme(legend.position = "none")
 # save the plot
-ggsave("figures/AMD_plot.png")
+ggsave("figures/AMD_plot.png",
+       width = 1600,
+       height = 753, 
+       units = "px")
 
 # estimate the beta_1_ relationship across the gradient
 amd_relationship <- amd_result %>%

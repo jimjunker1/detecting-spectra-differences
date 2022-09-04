@@ -3,6 +3,7 @@
 library(tidyverse)
 library(sizeSpectra) #bounded power law and MLE functions
 source("custom_functions.R")
+library(tidybayes)
 
 # read in datasets with variable sample size, n
 # All other params are as in main analysis
@@ -28,22 +29,25 @@ n1000$n <- 1000
 # combine all data sets
 dat <- bind_rows(n200, n500, n5000, n10000, n1000)
 
-# How does the lambda estimate vary by sample size?
-ggplot(dat, aes(x = n, y = estimate, color = name)) +
-  geom_point(alpha = 0.1) +
-  #stat_smooth(method = "loess") +
-  stat_summary(geom = "line",  fun = mean, size = 1.5) +
-  geom_hline(aes(yintercept = known_b), linetype = "dashed") +
-  facet_wrap(~known_b,
-             scales = "free") +
-  theme_bw() +
-  labs(title = "Lambda ~ n",
-       caption = "dashed line is known lambda value") +
-  NULL
+# labda ~n line graph old? ####
+# # How does the lambda estimate vary by sample size?
+# ggplot(dat, aes(x = n, y = estimate, color = name)) +
+#   geom_point(alpha = 0.1) +
+#   #stat_smooth(method = "loess") +
+#   stat_summary(geom = "line",  fun = mean, size = 1.5) +
+#   geom_hline(aes(yintercept = known_b), linetype = "dashed") +
+#   facet_wrap(~known_b,
+#              scales = "free") +
+#   theme_bw() +
+#   labs(title = "Lambda ~ n",
+#        caption = "dashed line is known lambda value") +
+#   NULL
+# 
+# ggsave("figures/lambda_n_5_sites.png",
+#        width = 8,
+#        height = 8)
 
-ggsave("figures/lambda_n_5_sites.png", width = 8, height = 8)
-
-
+# lambda ~ n density old? ####
 # how does estimate of lambda vary with sample size?
 # ggplot(dat,
 #        aes(x = estimate,
@@ -63,6 +67,8 @@ ggsave("figures/lambda_n_5_sites.png", width = 8, height = 8)
 #        x = "slope estimate") +
 #   theme_bw() +
 #   NULL
+
+# lambda estimate halfeye ####
 dat %>%
   mutate(Model = factor(name,
                         levels = 
@@ -85,6 +91,7 @@ dat %>%
              ncol = 5,
              labeller = label_both,
              scales = "free_x") +
+  theme(legend.position = "none") +
   NULL
 
 ggsave(paste0("figures/", 
@@ -93,6 +100,7 @@ ggsave(paste0("figures/",
        width = 8,
        height = 8)
 
+# regressions ####
 # what are the estimated relationships across gradient with varying n?
 dat %>%
   ggplot(aes(x = env_gradient,
@@ -115,7 +123,7 @@ ggsave(paste0("figures/",
        width = 8,
        height = 8)
 
-
+# relationship estimate halfeye ####
 # distribution of relationship estimate (beta values) with varied n
 relationship_estimate <- dat %>%
   group_by(rep, name, n) %>%
@@ -164,9 +172,10 @@ relationship_estimate %>%
                           size = 1,
                           linetype = "dashed")  +
   labs(
-    x = "Lambda estimate") +
+    x = "Relationship estimate") +
   facet_wrap(~n,
              scales = "free_x") +
+  theme(legend.position = "none") +
   NULL
 
 ggsave(filename = 
