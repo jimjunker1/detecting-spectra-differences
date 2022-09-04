@@ -8,6 +8,8 @@ author:
       correspondence: true
   - name: James R. Junker
     institute: [glrc, lumcon]
+  - name: Vojsava Gjoni
+    institute: usd
   - name: Jeff S. Wesner
     institute: usd
 institute:
@@ -16,18 +18,18 @@ institute:
   - lumcon: Louisiana Universities Marine Consortium, Chauvin, LA USA
   - usd: Dept. of Biology, University of South Dakota, Vermillion, SD, USA
 output:
-   pdf_document:
-     toc: yes
-     keep_tex: true
-     pandoc_args:
-     - '--lua-filter=scholarly-metadata.lua'
-     - '--lua-filter=author-info-blocks.lua'
    word_document:
       reference_docx: working_docx_template.docx
       toc: no
       pandoc_args:
       - '--lua-filter=scholarly-metadata.lua'
       - '--lua-filter=author-info-blocks.lua'
+   pdf_document:
+     toc: yes
+     keep_tex: true
+     pandoc_args:
+     - '--lua-filter=scholarly-metadata.lua'
+     - '--lua-filter=author-info-blocks.lua'
 header-includes:
   - \usepackage{lineno}
   - \usepackage{amsmath}
