@@ -332,7 +332,7 @@ if(sim_data$distribution[1] == "PLB"){
   #   labs(title = sim_data$distribution,
   #        x = "slope estimate") +
   #   NULL
-  #### New 8/30/22 "halfeye" plot
+  #### New 8/30/22 "halfeye" plot ####
   estimate_density <- sim_data %>%
     mutate(Model = factor(name,
                           levels = 
