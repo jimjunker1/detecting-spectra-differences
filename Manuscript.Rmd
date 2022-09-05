@@ -18,18 +18,18 @@ institute:
   - lumcon: Louisiana Universities Marine Consortium, Chauvin, LA USA
   - usd: Dept. of Biology, University of South Dakota, Vermillion, SD, USA
 output:
-   word_document:
-      reference_docx: working_docx_template.docx
-      toc: no
-      pandoc_args:
-      - '--lua-filter=scholarly-metadata.lua'
-      - '--lua-filter=author-info-blocks.lua'
    pdf_document:
      toc: yes
      keep_tex: true
      pandoc_args:
      - '--lua-filter=scholarly-metadata.lua'
      - '--lua-filter=author-info-blocks.lua'
+   word_document:
+      reference_docx: working_docx_template.docx
+      toc: no
+      pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
 header-includes:
   - \usepackage{lineno}
   - \usepackage{amsmath}
@@ -50,11 +50,9 @@ knitr::opts_chunk$set(
 library(tidyverse)
 ```
 
-**NOTE** I need to integrate reference manager with R markdown. Any favorites or recommendations?? I generally use Zotero (free), but think I have access to Mendeley through CMU...
+**NOTE** I'm still working on integrating with Zotero and importing all the necessary references (thanks Jim for the help and instructions!). Don't worry about the **??** references in the rendered version for now. 
 
-**NOTE from Jim** I use Zotero, mainly for free and open-source reasons, but I also can have a standalone program that doesn't require internet access, can backup my reference library on the cloud and sync among multiple computers, can spit out bibtex to connect to markdown, and can have group citation lists if neccessary. I use it with a betterBibtex add on that allows for modifying bibtex keys for calling refs in Rmarkdown.
-
-**NOTE** I re-ran all of these after setting the seed for reproducibility. Figures should be up to date, but the numbers may change slightly i.e., 94.8% might become 95.1%, mean $\pm$ SD values will be different.
+**Savina** I'm particularly keen to get your feedback on this. I think you mentioned including some other references and discussion in Jeff's Bayesian model paper. If you think they fit in here please let me know or feel free to include them. Likewise, please include any other comments you have, or if you have any insight into how the interpretation of results from different methods would vary. 
 
 # Abstract
 
@@ -101,7 +99,7 @@ For the main analysis, we were interested in determining whether or not the meth
 
 ## Estimation of Size spectra parameter $\lambda$
 
-For each sample of $M$ and each of the 1000 replicates, we estimated the exponent $\lambda$ using MLE methods modified from the the `sizeSpectra` package (Edwards et al. 2020). In addition, we use two common binning methods to estimate the OLS slope parameter in log-log space. For the first binning method, we created 6 equal logarithmic bins covering the range of body sizes. The count in each bin was normalized by dividing by the bin width. This method has been used by (refs here, I think a lot of Woodward's group uses this...) Throughout the manuscript, the normalized equal logarithmic binning method will be referred to as ELBn. The second method was similar to ELBn, but bins of Log~2~ widths are used. The count in each bin is normalized in the same way. This method has been used by [@pomeranz2019; @mcgarvey2019] and is referred to as the Normalized Abundance Spectrum (NAS). Previous work has investigated the biases in $\lambda$ estimates when using different methods (Edwards et al. (2017)[-@edwards2017], Edwards et al. 2020[-@edwards2020], White et al. 2008[-@white2007]). The focus of the present work is to investigate biases when estimating the relationship or relative change in parameters across an environmental gradient. Hence, we do not discuss the $\lambda$ estimates in the main text, but the results are presented in the Supplmental Information.
+For each sample of $M$ and each of the 1000 replicates, we estimated the exponent $\lambda$ using MLE methods modified from the the `sizeSpectra` package (Edwards et al. 2020). In addition, we use two common binning methods to estimate the OLS slope parameter in log-log space. For the first binning method, we created 6 equal logarithmic bins covering the range of body sizes. The count in each bin was normalized by dividing by the bin width. This method has been used by (refs here, I think a lot of Woodward's group uses this...) Throughout the manuscript, the normalized equal logarithmic binning method will be referred to as ELBn. The second method was similar to ELBn, but bins of Log~2~ widths are used. The count in each bin is normalized in the same way. This method has been used by [@pomeranz2019; @mcgarvey2019] and is referred to as the Normalized Abundance Spectrum (NAS). Previous work has investigated the biases in $\lambda$ estimates when using different methods (Edwards et al. (2017)[-@edwards2017], Edwards et al. 2020[-@edwards2020], White et al. 2008[-@white2007]). The focus of the present work is to investigate biases when estimating the relationship or relative change in parameters across an environmental gradient. Hence, we do not discuss the $\lambda$ estimates in the main text, but the results are presented in the Supplemental Information (**NOTE** I'm thinking about dropping this from SI. Might be too much info, and it's already been published on by Edwards. Does this add anything to the story??).
 
 ## Estimation of relationship across gradient, $\beta_1$
 
@@ -312,6 +310,8 @@ We reiterate the recommendations of White et al. (2007)[-@white2007], Sprules an
 \newpage
 
 ## $\lambda$ and relationship estimates
+
+**NOTE** I'm considering dropping the $\lambda$ estimate plots from the manuscript. I think it's too much info, but if it adds to the story I'm happy to leave it in. **END**
 
 In the main analysis, we simulate body size data from bounded power law distributions while varying the $\lambda$ exponent which describes the distribution. For the results presented in the main text, we held the number of sites at 5, scaled the environmental gradient from -1 to 1, and set the minimum and maximum body sizes to $0.0026$ and $1.2 *10^3$ respectively. Here, we plot the results of varying the number of sites (3, 10), increasing the scale of the environmental gradient (-100 to 100) and decreasing the range of body sizes (min = 1, max = 100). Generally, the results reported in the main manuscript are robust to changing these parameters: the MLE estimate is nearly always closer to the known parameters, and the variation in these estimates is usually smaller than the binning methods.
 
