@@ -1,5 +1,5 @@
 ---
-title: "Manuscript"
+title: "Manuscript: Detecting differences in Size Spectra"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 author: 
   - Justin Pomeranz:
@@ -111,17 +111,19 @@ We re-analyze two data sets of benthic macroinvertebrate communities from stream
 
 The second data set was from the wadeable stream sites of the National Ecological Observatory Network [@NEON_Inverts2022]. NEON stream sites are located across a wide temperature gradient in the United States, from Puerto Rico to Alaska. Quantitative macroinvertebrate samples were collected using the most appropriate method based on the local habitat. All individuals were identified and had their body lengths measured, and body mass was estimated using published length weight regressions. This data has been analyzed previously using size spectra methods as described in [@pomeranz2022]. Detailed methods of the sampling collection and data processing methods can be found on the NEON website ([<https://www.neonscience.org/data-collection/macroinvertebrates>], or macroinvertebrate DPI pubs). Coefficient estimates ($\pm$ 1 standard deviation) are compared across methods. This allows us to determine whether or not the main results would differ depending on the method used.
 
+## Data Availabity
+
+The data used in this manuscript is already publicly available (Pomeranz et al. 2019 data dryad DOI **here**, NEON data citation **here**. R Scripts to reproduce the full simulation and analysis are available at: ([<https://github.com/Jpomz/detecting-spectra-differences>]).   
+
 # Results
 
 ## Relationship across the hypothetical environmental gradient
 
 ![Relationship estimates across the hypothetical gradient for each replicate. Each panel is a different method for estimating the size spectra parameter.](figures/PLB_sim_main.png) 
 
-Alternate plot version 
+![alternate plot version; I think I like this one better. What are your thoughts on which you prefer??](figures/PLB_main_v2.png)
 
-![alternate plot version, thoughts on which you prefer??](figures/PLB_main_v2.png)
-
-All methods performed reasonably well in detecting the known relationship across the hypothetical environmental gradient (mean $\beta_1$ estimates ranged from -0.419 to -0.498). However, the SD for the NAS and ELBn methods were 2-3x larger that that of the MLE method (Figure ~XX~). This result was consistent across simulation parameters, including sample size, number of sites, and $\lambda$ values.
+The distribution of $\beta_1$ estimates from MLE method were the most accurate and precise, and the NAS method was the least accurate and precise (Table *xx*). The median estimates for all methods were closer to the known relationship. All of the methods produced estimate distributions with long right tails, but this pattern was greater in the ELBn and NAS methods (e.g., SD for ELBn and NAS methods were 2-3x larger, Figure *xx* Halfeye plots).This result was consistent across simulation parameters, including sample size, number of sites, and $\lambda$ values.
 
 \newpage
 
@@ -130,42 +132,46 @@ All methods performed reasonably well in detecting the known relationship across
 \newpage
 
 ```{r, echo=FALSE, warning=FALSE}
+# will turn these into "real" formatted tables if we decide they're useful
 read.csv("results/PLB_sim.csv") %>%
-  mutate(Model = name) %>%
-  select(Model, p50, p25, p975) %>%
-  mutate_at(vars(-Model), funs(round(., 2))) %>%
+  mutate(Model = name,
+         mean = mu_slope) %>%
+  select(Model, mean, p50, p25, p975) %>%
+  mutate_at(vars(-Model), funs(round(., 3))) %>%
   arrange(p50, p975)
 ```
 
-![Individual regression estimates across the hypothetical gradient based on sample size (rows) and methodology used (columns).](figures/n_vary_main.png)
+![Individual regression estimates across the hypothetical gradient based on sample size (rows) and methodology used (columns). (match this figure to "new" style if we like that better)](figures/n_vary_main.png)
 
 \newpage
 
 ## No relationship
 
-All of the methods performed similarly when there was no relationship across the hypothetical gradient. The mean $\beta_1$ estimates for all three methods ranged from -0.0005 to 0.0002. However, the distribution of coefficient estimates was much wider for the two binning methods; the 95th percentile of the MLE distributions is narrower thatn the 66th percentiles for the NAS and ELBn methods.
+All of the methods performed similarly when there was no relationship across the hypothetical gradient. The mean $\beta_1$ estimates for all three methods ranged from -0.0005 to 0.0002. Although the distributions were closely centered on 0, the distribution of coefficient estimates was much wider for the two binning methods; the 95th percentile of the MLE distributions is narrower than the 66th percentiles for the NAS and ELBn methods.
 
 ![Individual regression estimates when no relationship exists across the hypothetical environmental gradient. The methods are separated by rows. The median for all methocs is approximately zero, but the distribution for the MLE method is narrower than the two binning methods.](figures/PLB_static_b_relationship_density.png)
 
 ```{r, echo=FALSE, warning=FALSE}
 read.csv("results/PLB_static_b.csv") %>%
-  mutate(Model = name) %>%
-  select(Model, p50, p25, p975) %>%
-  mutate_at(vars(-Model), funs(round(., 2))) %>%
+  mutate(Model = name,
+         mean = mu_slope) %>%
+  select(Model, mean, p50, p25, p975) %>%
+  mutate_at(vars(-Model), funs(round(., 3))) %>%
   arrange(p50, p975)
 ```
 
 ## Small variation in lambda
 
-The performance of all methods to detect small variation in the $\lambda$ parameter (between -1.9 to -2.1) across the environmental gradient was also investigated. The median $\beta_1$ coefficient estimates for the MLE method was -0.1, which exactly matched the value for the hypothetical relationship, while the other two methods both had median estimates of 0.9. The upper 97.5 percentile of the distribution was below 0 for the MLE method, meaning that most of the estimates had the correct sign. In contrast, the upper 97.5 percentile for both the NAS and ELBn methods were greater than 0 at 0.027 and 0.052, respectively. (Figure 4).
+The performance of all methods to detect small variation in the $\lambda$ parameter (between -1.9 to -2.1) across the environmental gradient was also investigated. The median $\beta_1$ coefficient estimates for the MLE method was -0.1, which exactly matched the value for the hypothetical relationship, while the other two methods both had median estimates of -0.09. The upper 97.5 percentile of the distribution was below 0 for the MLE method, meaning that most of the estimates had the correct sign. In contrast, the upper 97.5 percentile for both the NAS and ELBn methods were greater than 0 at 0.027 and 0.052, respectively. (Figure 4).
 
 ![Distribution of the estimated relationship for each method. Here, $\lambda$ varied from -1.9 to -2.1, with a known relationaship of -0.1 across the gradient indicated by the dashed vertical line. The distribution of relationship estimates was approximately centered at the known relationship for all methods, with a narrower distribution observed for the MLE estimates.](figures/PLB_sim_small_relationship_density.png)
 
 ```{r, echo=FALSE, warning=FALSE}
 read.csv("results/PLB_sim_small.csv") %>%
-  mutate(Model = name) %>%
-  select(Model, p50, p25, p975) %>%
-  mutate_at(vars(-Model), funs(round(., 2))) %>%
+  mutate(Model = name,
+         mean = mu_slope) %>%
+  select(Model, mean, p50, p25, p975) %>%
+  mutate_at(vars(-Model), funs(round(., 3))) %>%
   arrange(p50, p975)
 ```
 
@@ -173,37 +179,37 @@ read.csv("results/PLB_sim_small.csv") %>%
 
 For both empirical data sets, the direction and magnitude of change (i.e. $\beta_1$ coefficients) are generally in agreement. Size spectra parameters consistently increase (become flatter) in the AMD data (Fig. XX A). Likewise, the size spectra parameters consistently increase (become steeper) with increasing temperature across the NEON sites (Fig XX D)
 
-**NOTE** I need to re-plot these in ggplot and and stitich together. Currently stitching pre-made png files, I think that's why it looks so funky.
+\newpage
+
+![Figure of empirical data estimates. All of the methods estimate the same sign of the relationship, but the estimates from the binning methods are generally greater than the MLE estimates. **NOTE** I need to re-plot these in ggplot and and stitch together. Currently stitching pre-made png files, I think that's why it looks so funky.](figures/empirical_combined.png)
 
 \newpage
 
-![Figure of empirical data estimates. All of the methods estimate the same sign of the relationship, but the estimates from the binning methods are generally greater than the MLE estimates.](figures/empirical_combined.png)
+The $\beta_1$ coefficient estimates for the AMD data are all positive and of relatively similar magnitudes across methods. The MLE estimate has the smallest magnitude and SD (0.063 $\pm$ 0.011 SD), The ELBn method is slightly larger and has a wider SD : (0.072 $\pm$ 0.018). Finally, the NAS method has the largest estimate and an intermediate standard deviation (0.076 $\pm$ 0.013). The range of the gradient in the AMD data is relatively small (9.5), but the absolute change in the size spectra parameter ($\lambda$) across the AMD gradient vary by ~0.13 units depending on the method used (range of absolute change: 0.59 to 0.72).
 
-\newpage
-
-The $\beta_1$ coefficient estimates for the AMD data are all positive and of relatively similar magnitudes across methods. The MLE estimate has the smallest magnitude and SD (0.063 $\pm$ 0.011 SD), The ELBn method is slightly larger and has a wider SD : (0.072 $\pm$ 0.018). Finally, the NAS method has the largest estimate and an intermediate standard deviation (0.076 $\pm$ 0.013). The range of the gradient in the AMD data is relatively small (9.5), meaning that the absolute change in the size spectra parameter ($\lambda$) across the AMD gradient are similar regardless of method used (range of absolute: 0.59 to 0.72).
-
-Similar to the AMD results, the $\beta_1$ coefficient estimates for the NEON data are all negative and have similar magnitudes across methods. The MLE estimate is once again the smallest (-0.006 $\pm$ 0.001 SD). The NAS and ELBn methods are larger at -0.004 $\pm$ 0.002, and -0.002 $\pm$ 0.002, respectively. Although the estimates are similar and have a small magnitude, the range of the gradient in this data is larger (\~30$\circ$C), meaning that the absolute change in $\lambda$ estimates ranges from 0.06 to 0.17, depending on the method used.
+Similar to the AMD results, the $\beta_1$ coefficient estimates for the NEON data are all negative and have similar magnitudes across methods. The MLE estimate is once again the smallest (-0.006 $\pm$ 0.001 SD). The NAS and ELBn methods are larger at -0.004 $\pm$ 0.002, and -0.002 $\pm$ 0.002, respectively. Although the estimates are similar and have a small magnitude, the range of the gradient in this data is larger (\~30$\circ$C), meaning that the absolute change in $\lambda$ estimates varies by 0.11 units depending on the methods used (range of absolute change across gradient: 0.06 to 0.17). 
 
 ## Simulating shallower lambdas
 
-Estimates of the relationship between lambda and a hypothetical gradient varied depending on the method used. However, interpretations of empirical data were broadly consistent across methodologies. Upon closer inspection, the values of size spectra parameters in the empirical data were considerably shallower than -2. Given that we found the performance of all methods increased with shallower $\lambda$'s we wanted to investigate how the methods performed with simulated values closer to the empirical estimates of parameters describing size spectra relationships. Therefore, we repeated the simulation process as in the main analysis, but used $\lambda$ values ranging from -1.1 to -1.5, with a known relationship of $\beta_1 = -0.2$
+Estimates of the relationship between lambda and a hypothetical gradient varied depending on the method used. However, interpretations of empirical data were broadly consistent across methodologies. Upon closer inspection, the values of size spectra parameters in the empirical data were considerably shallower than -2. Given that we found the performance of all methods increased with shallower $\lambda$'s we wanted to investigate how the methods performed with simulated values closer to the empirical estimates of parameters describing size spectra relationships in streams. Therefore, we repeated the simulation process as in the main analysis, but used $\lambda$ values ranging from -1.1 to -1.5, with a known relationship of $\beta_1 = -0.2$
 
 \newpage
 
-![Relationship estimates across the hypothetical gradient for each replicate. Each panel is a different method for estimating the size spectra parameter.](figures/shallow_lambda_main.png)
+![Relationship estimates across the hypothetical gradient for each replicate. Each panel is a different method for estimating the size spectra parameter. (match to "new" style if needed)](figures/shallow_lambda_main.png)
 
 We found generally less variability in the relationship estimates ($\beta_1$) across a gradient of distributions described with shallower $\lambda$ parameters. However, the median MLE estimate was once again closest to the hypothetical relationship and had the narrowest distribution. The median ELBn estimate was close to the hypothetical relationship but had a slightly wider distribution. Finally, 95% of the NAS estimates were greater than the hypothetical relationship. In general, the distributions from the different methodologies followed the same overall pattern, with the MLE estimates being the smallest, and the binning methods being larger (i.e., more positive).
 
-![Distribution of relationship coefficient estimates. Vertical line is the known relationship. All methods under estimate the value, but the mean magnitude and distribution of values is greater for the ELBn and NAS methods.](figures/PLB_shallow_lambda_relationship_density.png)
+![Distribution of relationship coefficient estimates. Vertical line is the known relationship. All methods under estimate the value, but the mean magnitude and distribution of values is greater for the ELBn and NAS methods. (not sure why this is such different proportions, need to re plot with right dimensions)](figures/PLB_shallow_lambda_relationship_density.png)
 
 ```{r, echo=FALSE, warning=FALSE}
 read.csv("results/shallow_lambda.csv") %>%
-  mutate(Model = name) %>%
-  select(Model, p50, p25, p975) %>%
-  mutate_at(vars(-Model), funs(round(., 2))) %>%
+  mutate(Model = name,
+         mean = mu_slope) %>%
+  select(Model, mean, p50, p25, p975) %>%
+  mutate_at(vars(-Model), funs(round(., 3))) %>%
   arrange(p50, p975)
 ```
+**NOTE** Not sure if these tables are usful or not. Shows same information as figures, but might be easier to see the quantitative values instead of estimating from plot
 
 \newpage
 
@@ -211,19 +217,24 @@ read.csv("results/shallow_lambda.csv") %>%
 
 Measuring parameters describing the decline in abundance with increasing body size in communities is being done with increasing frequency across ecology. Previous work has investigated the accuracy and inherent biases associated with different estimation methods. However, how these inaccuracies and biases compound across environmental gradients remains uncertain, making it difficult to detect variation in size spectra parameters across environmental gradients with confidence. Here, we sampled body sizes from known distributions with varying parameters ($\lambda$) and estimated the coefficient of the relationship ($\beta_1$) across a hypothetical gradient in order to assess how the results would vary depnding on the method used. Likewise, we compared how the interpretation of previously published results could change depending on the methodology used to estimate the relationship.
 
-Generally, the estimate from the MLE method was always closer to the known relationship in simulated data, and always had the smallest variation around the estimate.
+Generally, the estimate from the MLE method was always closer to the known $\lambda$ value, and resulted in the most accurate $\beta_1$ coefficient estimate for the hypothetical relationship in simulated data, and always had the smallest variation around the estimate.
 
-Binning methods are easy to use and interpret, which most likely accounts for their wide use in ecological studies. However, aggregating individuals into logarithmic bins removes a large source of the variation within the data by collapsing body size variation into a single values within bins. For example, all individuals placed into a bin that ranges from 2-4 grams of mass are all treated as having a mass of 3 grams, the midpoint of that bin. Likewise, a single abundance value is taken for this bin, despite that fact that there is almost certainly variation in the abundance of individuals that weigh \~2 grams or \~4 grams. By homogenizing the data in this way, it seems that binning methods will always produce noisier results than MLE from the binning process alone, since binning is akin to deleting information that the model could otherwise use.
+Binning methods are easy to use and interpret, which most likely accounts for their wide use in ecological studies. However, aggregating individuals into logarithmic bins removes a large source of the variation within the data by collapsing body size variation into a single values within bins. For example, all individuals placed into a bin that ranges from 2-4 grams of mass are all treated as having a mass of 3 grams, the midpoint of that bin. Likewise, a single abundance value is taken for this bin, despite that fact that there is almost certainly variation in the abundance of individuals that weigh \~2 grams or \~4 grams. By homogenizing the data in this way, it seems that binning methods will always produce noisier results than MLE from the binning process alone, since binning is akin to deleting information that the model could otherwise use. One of the benefits of using MLE is that all data points are retained for use within the model.
 
-One of the benefits of using MLE is that all data points are retained for use within the model.
+The variation in estimated relationships across the empirical datasets varied by ~0.1 units depending on the method used. At first glance this may not appear to be a concerning magnitude of variation. However, when one considers the range of variation reported in many seminal works on size spectra relationships in streams is ~0.1-0.2 (SI Table *xx*), it is apparent that many of these results may be dependent on the method used. 
 
 The performance of all methods improved as sample size increases, and as the exponent of the size spectra relationship gets larger (more shallow). As either or both of these variables change, the difference in estimated relationship coefficients declines across the methods. This is particularly interesting given the fact that both empirical data sets of stream communities examined here are shallower than the expected relationship of $\lambda = -2$, and the conclusions of the change in size spectra relationships across the gradients are not dependent on method used. If communities under study are in fact described by shallower exponents, the method used may not be critical in the conclusions reached. However, the MLE method performs as well or better than the two binning methods examined here under all contexts and should be the preferred method in future studies. At a minimum, future studies should report MLE estimates to ensure that the results are not dependent on the methodology used.
 
-Despite the drop in performance with reduced variation in $\lambda$ values, when a significant relationship was observed, it was generally in the correct direction and of a similar magnitude. This suggests that previously reported significant changes in size spectra parameters across environmental gradients and in experimental manipulations are plausible, and the magnitude of the relative change is a reasonable estimate. Given that all of the data within a study is treated identically, the the over all change in size spectra parameters is likely reasonable. However, the biases and inconsistencies in relationship estimates presented here suggest that it would be difficult if not impossible to compare the relative changes across different published studies which use different methods. Publication of individual body size data with future studies of size spectra relationships would greatly aid in our ability to generalize changes to this fundamental aspect of community organization across spatiotemporal scales and in response to environmental stressors and perturbations.
+Despite the drop in performance with reduced variation in $\lambda$ values, the estimated relationship coefficient was generally in the correct direction and of a similar magnitude. This suggests that previously reported significant changes in size spectra parameters across environmental gradients and in experimental manipulations are plausible. Given that all of the data within a study is treated identically, the the over all change in size spectra parameters is likely reasonable. However, the biases and inconsistencies in relationship estimates presented here suggest that it would be difficult if not impossible to compare the relative changes across different published studies which use different methods. Publication of individual body size data with future studies of size spectra relationships would greatly aid in our ability to generalize changes to this fundamental aspect of community organization across spatiotemporal scales and in response to environmental conditions.
+
+**NOTE** not sure if the idea below belongs in this paper or not, but it's something I've been thinking about for a while. I'm using this as an excuse to write out my thoughts and to see what y'all think about it. Maybe it's another paper to write in the future?
+
+
+An interesting finding is that the empirical data sets used here were quite a bit shallower than is expected based on theory, and that what has been observed empirically in marine systems. There are two, non-mutually exclusive, possible explanations for this: 1) freshwater streams are more dependent on detrital resources, 2) streams are effectively 2D systems, whereas marine systems are 3D. Blanchard et al.  (2009) observed that benthic marine communities had shallower slopes than pelagic communities, and that this was likely due to a stronger reliance on a shared detrital basal resource in the benthic community, whereas the pelagic community was largely driven by energy transfer through predator-prey interactions. The importance of allochthonous resources in stream ecosystems has long been recognized (Vannote et al. 1980). The stream data here largely comes from low order, headwater streams which may be reasonably considered to be driven by allochthonous resources. It is possible that the communities sampled here are structured based on a shared basal resource, and that the importance of predator-prey interactions is reduced. An alternate hypothesis is the relative dimensionality of search space in benthic and pelagic systems. Consumption rates and interaction strenghts have been shown to vary markedly based on search dimensionality. Consumers generally encounter resources more frequently in 3D environments (i.e., aerial, pelagic) than in 2D environments (i.e., benthic, terrestrial), and lead to stronger consumption rates and interaction strengths. Likewise, it has been hypothesized that the scaling exponent for mass-specific search rates may vary based on search space dimensionality instead of being set at approximately 0.75 (Pawar, Dell, Savage, 2012). 
 
 ## Concluding Remarks
 
-Both of the binning methods can perform as well as MLE under certain circumstances (large sample size, shallow $\lambda$). However, it would be extremely difficult to know if this was the case beforehand. Furthermore, in order to confirm this result, MLE methods would likely need to be employed. With the publication of the sizespectra package [-@edwards2017], producing MLE estimates of size spectra parameters is a relatively easy task. Therefore, we recommend using this in all future studies of size spectra relationships.
+Both of the binning methods can perform as well as MLE under certain circumstances (large sample size, shallow $\lambda$). However, it would be unlikely for a researcher to know if this was the case beforehand. Furthermore, in order to confirm this result, MLE methods would likely need to be employed. With the publication of the *sizespectra* package [-@edwards2017], producing MLE estimates of size spectra parameters is a relatively easy task. Therefore, we recommend using this in all future studies of size spectra relationships.
 
 We reiterate the recommendations of White et al. (2007)[-@white2007], Sprules and Barth (2016)[-@sprules2016] and Edwards et al. (2017)[-@edwards2017] to estimate size spectra relationships using MLE methods due to their superior performance in nearly every context. Furthermore, we strongly encourage authors to publish individual size data whenever possible. This will allow for the consistent re-analysis of existing data sets as methodologies develop and improve. This will aid in the ability for size spectra work to be synthesized between research groups and across scales.
 
@@ -242,6 +253,8 @@ We reiterate the recommendations of White et al. (2007)[-@white2007], Sprules an
 \beginsupplement
 ```
 ## Range of body sizes, $M$
+
+**NOTE** udate all plots to be consistent with main text
 
 ![Individual regressions for five sites across a hypothetical gradient with a known relationship of 0.5. Range of body sizes is reduced and is from 1, to 100.](figures/PLB_small_m_main.png)
 
@@ -354,3 +367,13 @@ In the main analysis, we simulate body size data from bounded power law distribu
 \newpage
 
 ![Relationship estimate](figures/PLB_small_m_relationship_density.png)
+
+# Comparison with other published estimates
+
+SI Table. This table shows published estimates of the variation in size spectra slopes (or exponents) in empirical studies. It is unclear how to directly compare estimates of the slope with different methods.However, the published estimates here range from ~0.1 to 0.2 across the gradients studied. For comparison, the 2.5-95% quantiles around the relationship estimate for the MLE method were ~0.1, whereas for the ELBn and NAS method they were ~0.25 and ~0.2, respectively. b_diff is the change in estimate (b-low - b-min). System refers to stream communities or mesocosm experiments. Method: MLE = maximum likelihod estimate, ELB = equal logarthmic binning, the number before indicates the number of bins used. The normalization process shifts the estimates by an absolute value of 1.0. Hence, direct comparison the relative change in normalized and non-normalized studies should not introduce any bias. The O'Gorman et al. 2017 study used average species size and abundance (Local Size Density Relationship, *sensu* White et al. 2007) as opposed to individual size distribution. These methods are related, but it is unclear how to directly compare estimates from each method. 
+
+```{r}
+read.csv("lit comparison.csv")
+```
+
+

@@ -27,12 +27,52 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={Manuscript},
+  pdftitle={Manuscript: Detecting differences in Size Spectra},
   pdfauthor={Justin Pomeranz1,; James R. Junker2,3; Vojsava Gjoni4; Jeff S. Wesner4},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
 \usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -82,11 +122,11 @@
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
-\title{Manuscript}
+\title{Manuscript: Detecting differences in Size Spectra}
 \author{Justin Pomeranz\textsuperscript{1,*} \and James R.
 Junker\textsuperscript{2,3} \and Vojsava
 Gjoni\textsuperscript{4} \and Jeff S. Wesner\textsuperscript{4}}
-\date{05 September, 2022}
+\date{24 September, 2022}
 
 \begin{document}
 \maketitle
@@ -361,6 +401,15 @@ standard deviation) are compared across methods. This allows us to
 determine whether or not the main results would differ depending on the
 method used.
 
+\hypertarget{data-availabity}{%
+\subsection{Data Availabity}\label{data-availabity}}
+
+The data used in this manuscript is already publicly available (Pomeranz
+et al.~2019 data dryad DOI \textbf{here}, NEON data citation
+\textbf{here}. R Scripts to reproduce the full simulation and analysis
+are available at:
+({[}\url{https://github.com/Jpomz/detecting-spectra-differences}{]}).
+
 \hypertarget{results}{%
 \section{Results}\label{results}}
 
@@ -376,21 +425,22 @@ each replicate. Each panel is a different method for estimating the size
 spectra parameter.}
 \end{figure}
 
-Alternate plot version
-
 \begin{figure}
 \centering
 \includegraphics{figures/PLB_main_v2.png}
-\caption{alternate plot version, thoughts on which you prefer??}
+\caption{alternate plot version; I think I like this one better. What
+are your thoughts on which you prefer??}
 \end{figure}
 
-All methods performed reasonably well in detecting the known
-relationship across the hypothetical environmental gradient (mean
-\(\beta_1\) estimates ranged from -0.419 to -0.498). However, the SD for
-the NAS and ELBn methods were 2-3x larger that that of the MLE method
-(Figure \textsubscript{XX}). This result was consistent across
-simulation parameters, including sample size, number of sites, and
-\(\lambda\) values.
+The distribution of \(\beta_1\) estimates from MLE method were the most
+accurate and precise, and the NAS method was the least accurate and
+precise (Table \emph{xx}). The median estimates for all methods were
+closer to the known relationship. All of the methods produced estimate
+distributions with long right tails, but this pattern was greater in the
+ELBn and NAS methods (e.g., SD for ELBn and NAS methods were 2-3x
+larger, Figure \emph{xx} Halfeye plots).This result was consistent
+across simulation parameters, including sample size, number of sites,
+and \(\lambda\) values.
 
 \newpage
 
@@ -409,17 +459,18 @@ across replicates.}
 \newpage
 
 \begin{verbatim}
-##   Model   p50   p25  p975
-## 1   MLE -0.49 -0.50 -0.48
-## 2  ELBn -0.49 -0.52 -0.29
-## 3   NAS -0.44 -0.46 -0.30
+##   Model   mean    p50    p25   p975
+## 1   MLE -0.495 -0.494 -0.499 -0.483
+## 2  ELBn -0.460 -0.489 -0.524 -0.291
+## 3   NAS -0.419 -0.442 -0.458 -0.302
 \end{verbatim}
 
 \begin{figure}
 \centering
 \includegraphics{figures/n_vary_main.png}
 \caption{Individual regression estimates across the hypothetical
-gradient based on sample size (rows) and methodology used (columns).}
+gradient based on sample size (rows) and methodology used (columns).
+(match this figure to ``new'' style if we like that better)}
 \end{figure}
 
 \newpage
@@ -429,10 +480,11 @@ gradient based on sample size (rows) and methodology used (columns).}
 
 All of the methods performed similarly when there was no relationship
 across the hypothetical gradient. The mean \(\beta_1\) estimates for all
-three methods ranged from -0.0005 to 0.0002. However, the distribution
-of coefficient estimates was much wider for the two binning methods; the
-95th percentile of the MLE distributions is narrower thatn the 66th
-percentiles for the NAS and ELBn methods.
+three methods ranged from -0.0005 to 0.0002. Although the distributions
+were closely centered on 0, the distribution of coefficient estimates
+was much wider for the two binning methods; the 95th percentile of the
+MLE distributions is narrower than the 66th percentiles for the NAS and
+ELBn methods.
 
 \begin{figure}
 \centering
@@ -445,10 +497,10 @@ methods.}
 \end{figure}
 
 \begin{verbatim}
-##   Model p50   p25 p975
-## 1   MLE   0 -0.01 0.04
-## 2   NAS   0 -0.04 0.12
-## 3  ELBn   0 -0.05 0.13
+##   Model   mean    p50    p25  p975
+## 1   MLE -0.001 -0.001 -0.012 0.038
+## 2   NAS  0.000 -0.001 -0.039 0.119
+## 3  ELBn  0.000 -0.001 -0.046 0.134
 \end{verbatim}
 
 \hypertarget{small-variation-in-lambda}{%
@@ -459,7 +511,7 @@ The performance of all methods to detect small variation in the
 gradient was also investigated. The median \(\beta_1\) coefficient
 estimates for the MLE method was -0.1, which exactly matched the value
 for the hypothetical relationship, while the other two methods both had
-median estimates of 0.9. The upper 97.5 percentile of the distribution
+median estimates of -0.09. The upper 97.5 percentile of the distribution
 was below 0 for the MLE method, meaning that most of the estimates had
 the correct sign. In contrast, the upper 97.5 percentile for both the
 NAS and ELBn methods were greater than 0 at 0.027 and 0.052,
@@ -477,10 +529,10 @@ observed for the MLE estimates.}
 \end{figure}
 
 \begin{verbatim}
-##   Model   p50   p25  p975
-## 1   MLE -0.10 -0.11 -0.06
-## 2   NAS -0.09 -0.13  0.03
-## 3  ELBn -0.09 -0.13  0.05
+##   Model   mean    p50    p25   p975
+## 1   MLE -0.100 -0.101 -0.112 -0.062
+## 2  ELBn -0.091 -0.095 -0.134  0.052
+## 3   NAS -0.088 -0.091 -0.126  0.027
 \end{verbatim}
 
 \hypertarget{empirical-data-1}{%
@@ -493,10 +545,6 @@ XX A). Likewise, the size spectra parameters consistently increase
 (become steeper) with increasing temperature across the NEON sites (Fig
 XX D)
 
-\textbf{NOTE} I need to re-plot these in ggplot and and stitich
-together. Currently stitching pre-made png files, I think that's why it
-looks so funky.
-
 \newpage
 
 \begin{figure}
@@ -504,7 +552,9 @@ looks so funky.
 \includegraphics{figures/empirical_combined.png}
 \caption{Figure of empirical data estimates. All of the methods estimate
 the same sign of the relationship, but the estimates from the binning
-methods are generally greater than the MLE estimates.}
+methods are generally greater than the MLE estimates. \textbf{NOTE} I
+need to re-plot these in ggplot and and stitch together. Currently
+stitching pre-made png files, I think that's why it looks so funky.}
 \end{figure}
 
 \newpage
@@ -515,9 +565,10 @@ has the smallest magnitude and SD (0.063 \(\pm\) 0.011 SD), The ELBn
 method is slightly larger and has a wider SD : (0.072 \(\pm\) 0.018).
 Finally, the NAS method has the largest estimate and an intermediate
 standard deviation (0.076 \(\pm\) 0.013). The range of the gradient in
-the AMD data is relatively small (9.5), meaning that the absolute change
-in the size spectra parameter (\(\lambda\)) across the AMD gradient are
-similar regardless of method used (range of absolute: 0.59 to 0.72).
+the AMD data is relatively small (9.5), but the absolute change in the
+size spectra parameter (\(\lambda\)) across the AMD gradient vary by
+\textasciitilde0.13 units depending on the method used (range of
+absolute change: 0.59 to 0.72).
 
 Similar to the AMD results, the \(\beta_1\) coefficient estimates for
 the NEON data are all negative and have similar magnitudes across
@@ -526,8 +577,8 @@ methods. The MLE estimate is once again the smallest (-0.006 \(\pm\)
 and -0.002 \(\pm\) 0.002, respectively. Although the estimates are
 similar and have a small magnitude, the range of the gradient in this
 data is larger (\textasciitilde30\(\circ\)C), meaning that the absolute
-change in \(\lambda\) estimates ranges from 0.06 to 0.17, depending on
-the method used.
+change in \(\lambda\) estimates varies by 0.11 units depending on the
+methods used (range of absolute change across gradient: 0.06 to 0.17).
 
 \hypertarget{simulating-shallower-lambdas}{%
 \subsection{Simulating shallower
@@ -541,9 +592,9 @@ were considerably shallower than -2. Given that we found the performance
 of all methods increased with shallower \(\lambda\)'s we wanted to
 investigate how the methods performed with simulated values closer to
 the empirical estimates of parameters describing size spectra
-relationships. Therefore, we repeated the simulation process as in the
-main analysis, but used \(\lambda\) values ranging from -1.1 to -1.5,
-with a known relationship of \(\beta_1 = -0.2\)
+relationships in streams. Therefore, we repeated the simulation process
+as in the main analysis, but used \(\lambda\) values ranging from -1.1
+to -1.5, with a known relationship of \(\beta_1 = -0.2\)
 
 \newpage
 
@@ -552,7 +603,7 @@ with a known relationship of \(\beta_1 = -0.2\)
 \includegraphics{figures/shallow_lambda_main.png}
 \caption{Relationship estimates across the hypothetical gradient for
 each replicate. Each panel is a different method for estimating the size
-spectra parameter.}
+spectra parameter. (match to ``new'' style if needed)}
 \end{figure}
 
 We found generally less variability in the relationship estimates
@@ -573,15 +624,20 @@ positive).
 \caption{Distribution of relationship coefficient estimates. Vertical
 line is the known relationship. All methods under estimate the value,
 but the mean magnitude and distribution of values is greater for the
-ELBn and NAS methods.}
+ELBn and NAS methods. (not sure why this is such different proportions,
+need to re plot with right dimensions)}
 \end{figure}
 
 \begin{verbatim}
-##   Model   p50   p25  p975
-## 1   MLE -0.20 -0.21 -0.18
-## 2  ELBn -0.19 -0.21 -0.16
-## 3   NAS -0.17 -0.18 -0.15
+##   Model   mean    p50    p25   p975
+## 1   MLE -0.199 -0.199 -0.205 -0.183
+## 2  ELBn -0.195 -0.195 -0.207 -0.161
+## 3   NAS -0.174 -0.174 -0.183 -0.151
 \end{verbatim}
+
+\textbf{NOTE} Not sure if these tables are usful or not. Shows same
+information as figures, but might be easier to see the quantitative
+values instead of estimating from plot
 
 \newpage
 
@@ -603,8 +659,9 @@ how the interpretation of previously published results could change
 depending on the methodology used to estimate the relationship.
 
 Generally, the estimate from the MLE method was always closer to the
-known relationship in simulated data, and always had the smallest
-variation around the estimate.
+known \(\lambda\) value, and resulted in the most accurate \(\beta_1\)
+coefficient estimate for the hypothetical relationship in simulated
+data, and always had the smallest variation around the estimate.
 
 Binning methods are easy to use and interpret, which most likely
 accounts for their wide use in ecological studies. However, aggregating
@@ -618,10 +675,16 @@ variation in the abundance of individuals that weigh \textasciitilde2
 grams or \textasciitilde4 grams. By homogenizing the data in this way,
 it seems that binning methods will always produce noisier results than
 MLE from the binning process alone, since binning is akin to deleting
-information that the model could otherwise use.
+information that the model could otherwise use. One of the benefits of
+using MLE is that all data points are retained for use within the model.
 
-One of the benefits of using MLE is that all data points are retained
-for use within the model.
+The variation in estimated relationships across the empirical datasets
+varied by \textasciitilde0.1 units depending on the method used. At
+first glance this may not appear to be a concerning magnitude of
+variation. However, when one considers the range of variation reported
+in many seminal works on size spectra relationships in streams is
+\textasciitilde0.1-0.2 (SI Table \emph{xx}), it is apparent that many of
+these results may be dependent on the method used.
 
 The performance of all methods improved as sample size increases, and as
 the exponent of the size spectra relationship gets larger (more
@@ -640,12 +703,11 @@ should report MLE estimates to ensure that the results are not dependent
 on the methodology used.
 
 Despite the drop in performance with reduced variation in \(\lambda\)
-values, when a significant relationship was observed, it was generally
-in the correct direction and of a similar magnitude. This suggests that
+values, the estimated relationship coefficient was generally in the
+correct direction and of a similar magnitude. This suggests that
 previously reported significant changes in size spectra parameters
 across environmental gradients and in experimental manipulations are
-plausible, and the magnitude of the relative change is a reasonable
-estimate. Given that all of the data within a study is treated
+plausible. Given that all of the data within a study is treated
 identically, the the over all change in size spectra parameters is
 likely reasonable. However, the biases and inconsistencies in
 relationship estimates presented here suggest that it would be difficult
@@ -654,19 +716,51 @@ published studies which use different methods. Publication of individual
 body size data with future studies of size spectra relationships would
 greatly aid in our ability to generalize changes to this fundamental
 aspect of community organization across spatiotemporal scales and in
-response to environmental stressors and perturbations.
+response to environmental conditions.
+
+\textbf{NOTE} not sure if the idea below belongs in this paper or not,
+but it's something I've been thinking about for a while. I'm using this
+as an excuse to write out my thoughts and to see what y'all think about
+it. Maybe it's another paper to write in the future?
+
+An interesting finding is that the empirical data sets used here were
+quite a bit shallower than is expected based on theory, and that what
+has been observed empirically in marine systems. There are two,
+non-mutually exclusive, possible explanations for this: 1) freshwater
+streams are more dependent on detrital resources, 2) streams are
+effectively 2D systems, whereas marine systems are 3D. Blanchard et
+al.~(2009) observed that benthic marine communities had shallower slopes
+than pelagic communities, and that this was likely due to a stronger
+reliance on a shared detrital basal resource in the benthic community,
+whereas the pelagic community was largely driven by energy transfer
+through predator-prey interactions. The importance of allochthonous
+resources in stream ecosystems has long been recognized (Vannote et
+al.~1980). The stream data here largely comes from low order, headwater
+streams which may be reasonably considered to be driven by allochthonous
+resources. It is possible that the communities sampled here are
+structured based on a shared basal resource, and that the importance of
+predator-prey interactions is reduced. An alternate hypothesis is the
+relative dimensionality of search space in benthic and pelagic systems.
+Consumption rates and interaction strenghts have been shown to vary
+markedly based on search dimensionality. Consumers generally encounter
+resources more frequently in 3D environments (i.e., aerial, pelagic)
+than in 2D environments (i.e., benthic, terrestrial), and lead to
+stronger consumption rates and interaction strengths. Likewise, it has
+been hypothesized that the scaling exponent for mass-specific search
+rates may vary based on search space dimensionality instead of being set
+at approximately 0.75 (Pawar, Dell, Savage, 2012).
 
 \hypertarget{concluding-remarks}{%
 \subsection{Concluding Remarks}\label{concluding-remarks}}
 
 Both of the binning methods can perform as well as MLE under certain
 circumstances (large sample size, shallow \(\lambda\)). However, it
-would be extremely difficult to know if this was the case beforehand.
-Furthermore, in order to confirm this result, MLE methods would likely
-need to be employed. With the publication of the sizespectra package
-(2017), producing MLE estimates of size spectra parameters is a
-relatively easy task. Therefore, we recommend using this in all future
-studies of size spectra relationships.
+would be unlikely for a researcher to know if this was the case
+beforehand. Furthermore, in order to confirm this result, MLE methods
+would likely need to be employed. With the publication of the
+\emph{sizespectra} package (2017), producing MLE estimates of size
+spectra parameters is a relatively easy task. Therefore, we recommend
+using this in all future studies of size spectra relationships.
 
 We reiterate the recommendations of White et al.~(2007)(2007), Sprules
 and Barth (2016)(2016) and Edwards et al.~(2017)(2017) to estimate size
@@ -751,6 +845,8 @@ body size and abundance in ecology}. Trends in Ecology \& Evolution
 \hypertarget{range-of-body-sizes-m}{%
 \subsection{\texorpdfstring{Range of body sizes,
 \(M\)}{Range of body sizes, M}}\label{range-of-body-sizes-m}}
+
+\textbf{NOTE} udate all plots to be consistent with main text
 
 \begin{figure}
 \centering
@@ -1016,5 +1112,64 @@ line). Range of body sizes is smaller than main anaysis and ranges from
 \includegraphics{figures/PLB_small_m_relationship_density.png}
 \caption{Relationship estimate}
 \end{figure}
+
+\hypertarget{comparison-with-other-published-estimates}{%
+\section{Comparison with other published
+estimates}\label{comparison-with-other-published-estimates}}
+
+SI Table. This table shows published estimates of the variation in size
+spectra slopes (or exponents) in empirical studies. It is unclear how to
+directly compare estimates of the slope with different methods.However,
+the published estimates here range from \textasciitilde0.1 to 0.2 across
+the gradients studied. For comparison, the 2.5-95\% quantiles around the
+relationship estimate for the MLE method were \textasciitilde0.1,
+whereas for the ELBn and NAS method they were \textasciitilde0.25 and
+\textasciitilde0.2, respectively. b\_diff is the change in estimate
+(b-low - b-min). System refers to stream communities or mesocosm
+experiments. Method: MLE = maximum likelihod estimate, ELB = equal
+logarthmic binning, the number before indicates the number of bins used.
+The normalization process shifts the estimates by an absolute value of
+1.0. Hence, direct comparison the relative change in normalized and
+non-normalized studies should not introduce any bias. The O'Gorman et
+al.~2017 study used average species size and abundance (Local Size
+Density Relationship, \emph{sensu} White et al.~2007) as opposed to
+individual size distribution. These methods are related, but it is
+unclear how to directly compare estimates from each method.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{read.csv}\NormalTok{(}\StringTok{"lit comparison.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                      Author b_diff error error_type b_low
+## 1                      Pomeranz et al. 2021   0.12    NA            -1.37
+## 2     Yvon Durocher et al. 2011 (Community)   0.13    NA            -0.79
+## 3             Dossena et al. 2012 (October)   0.14 0.070         se    NA
+## 4                      O'Gorman et al. 2017   0.15    NA            -0.85
+## 5                      Martinez et al. 2016   0.15    NA            -1.11
+## 6 Yvon Durocher et al. 2011 (Phytoplankton)   0.19    NA            -0.46
+## 7                    McGarvey and Kirk 2018   0.19    NA            -1.81
+## 8               Dossena et al. 2012 (April)   0.21 0.064         se    NA
+##   b_high       System      Driver
+## 1  -1.25      Streams Temperature
+## 2  -0.92 FW mesocosms Temperature
+## 3     NA FW mesocosms Temperature
+## 4  -0.70      Streams Temperature
+## 5  -0.96      Streams    Land Use
+## 6  -0.65 FW mesocosms Temperature
+## 7  -1.62      Streams Seasonality
+## 8     NA FW mesocosms Temperature
+##                                                Method
+## 1                                                 MLE
+## 2                              10 ELB, not normalized
+## 3                               6 ELB, not normalized
+## 4 ln (mean species abundance) ~ ln(mean species mass)
+## 5                               6 ELB, not normalized
+## 6                              10 ELB, not normalized
+## 7                                      NAS, Log2 bins
+## 8                               6 ELB, not normalized
+\end{verbatim}
 
 \end{document}
