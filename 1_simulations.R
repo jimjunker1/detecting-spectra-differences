@@ -40,7 +40,16 @@ rep = 1000
 m_lower = 0.0026
 m_upper = 1.2e3
 
-debugonce(sim_result)
+localJob = TRUE
+if(localJob){
+  rstudioapi::jobRunScript(
+    here::here("ignore/plb_localjob.R"),
+    name = "plb simulation",
+    workingDir = here::here(),
+    importEnv = FALSE,
+    exportEnv = ""
+    )
+} else{
 PLB_sim <- sim_result(n = 1000,
                       b = lambda,
                       env_gradient = env_gradient,
@@ -52,11 +61,12 @@ PLB_sim <- sim_result(n = 1000,
 saveRDS(PLB_sim, file = paste0("data_sim/",
                                substitute(PLB_sim),
                                "_dat.rds"))
+}
 
 PLB_sim = readRDS(file = paste0("data_sim/",
                                 substitute(PLB_sim),
                                 "_dat.rds"))
-plot_sim(PLB_sim)
+# plot_sim(PLB_sim)
 #rm(PLB_sim)
 
 # PLB no relationship
@@ -183,12 +193,21 @@ rm(PLB_10_sites)
 # sample size of body sizes -----------------------------------------------
 # varying the sample size of simulated data
 # 10,000, 5,000, 500, 100
-
-#rep = 1000
+localJob = TRUE
+if(localJob){
+  rstudioapi::jobRunScript(
+    here::here("ignore/plb_n_simulation.R"),
+    name = "N simulation",
+    workingDir = here::here(),
+    importEnv = FALSE,
+    exportEnv = ""
+  )
+}
+rep = 100
 n = 10000 
 # for reproducibility
 set.seed(2806)
-
+debugonce(sim_result)
 PLB_sim_n10000 <- sim_result(n = n,
                              b = lambda,
                              env_gradient = env_gradient,
@@ -197,6 +216,15 @@ PLB_sim_n10000 <- sim_result(n = n,
                              m_upper = m_upper,
                              distribution = "PLB")
 PLB_sim_n10000$n <- n
+PLB_sim_n10000 = PLB_sim_n10000 %>%
+  unnest(cols = c(dw_min, dw_max)) %>%
+  dplyr::mutate(bias = abs(known_b - estimate))
+
+PLB_sim_n10000 %>%
+  ggplot()+
+  geom_point(aes(x = dw_max, y = bias))+
+  facet_wrap(~name)
+
 
 plot_sim(PLB_sim_n10000)
 

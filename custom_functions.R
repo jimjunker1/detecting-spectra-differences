@@ -255,7 +255,7 @@ sim_result <- function(n = 1000,
   
   dw_range = range(sim_df$m, na.rm = TRUE)
   
-  out <- sim_df %>%
+  out <- sim_df  %>%
     group_by(rep,
              known_b,
              known_relationship,
@@ -264,8 +264,10 @@ sim_result <- function(n = 1000,
              m_lower,
              m_upper) %>%
     nest() %>% 
-    mutate(method_compare = 
-             map(data, 
+    mutate(dw_min = map(data, ~min(.x$m,na.rm = TRUE)),
+           dw_max = map(data, ~max(.x$m, na.rm = TRUE)),
+           method_compare = 
+             furrr::future_map(data, 
                  # added the possibly() function on 6/12/2022
                  # small sample size (n=100) was having a hard time with MLE estimates for steep (b = -2.5) distributions
                  # added this so that it "skips" problematic iterations instead of stopping. 
@@ -276,6 +278,8 @@ sim_result <- function(n = 1000,
     ungroup() %>%
     select(-data) %>%
     unnest(cols = method_compare)
+  # return(list(out = out,
+  #             sampleList = sample_list))
   out
 }
 
