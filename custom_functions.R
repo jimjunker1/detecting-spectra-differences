@@ -283,18 +283,25 @@ sim_result <- function(n = 1000,
 plot_sim <- function(sim_data,
                      display = FALSE,
                      adjust = 1){
-  # plot each regression "rep"
-  main_plot <- ggplot(sim_data,
-         aes(x = env_gradient,
-             y = estimate, 
-             group = rep,
-             color = rep)) +
+  main_plot <- sim_data %>%
+    mutate(Model = factor(name,
+                          levels = 
+                            c("MLE",
+                              "ELBn", 
+                              "NAS"))) %>%
+    ggplot(aes(x = env_gradient,
+               y = estimate, 
+               group = rep,
+               color = Model)) +
+    scale_color_manual(
+      values = c("#019AFF", "#FF914A", "#FF1984" )) +
     stat_smooth(geom = "line",
                 method = "lm",
                 alpha = 0.15,
-                se = FALSE)+
-    geom_point() +
-    facet_wrap(~name)+
+                se = FALSE, 
+                color = "black") +
+    geom_point(alpha = 0.5) +
+    facet_wrap(~Model)+
     labs(title = sim_data$distribution,
          subtitle = 
            paste0("m_range =(",
@@ -305,8 +312,36 @@ plot_sim <- function(sim_data,
                   min(sim_data$known_b),
                   ",",
                   max(sim_data$known_b),
-                        ")")) +
-    theme_bw()
+                  ")")) +
+    theme_bw() +
+    theme(legend.position="none")+
+    NULL
+  
+  ### main plot version 1, color = rep
+  # # plot each regression "rep"
+  # main_plot <- ggplot(sim_data,
+  #        aes(x = env_gradient,
+  #            y = estimate, 
+  #            group = rep,
+  #            color = rep)) +
+  #   stat_smooth(geom = "line",
+  #               method = "lm",
+  #               alpha = 0.15,
+  #               se = FALSE)+
+  #   geom_point() +
+  #   facet_wrap(~name)+
+  #   labs(title = sim_data$distribution,
+  #        subtitle = 
+  #          paste0("m_range =(",
+  #                 sim_data$m_lower,
+  #                 ",",
+  #                 sim_data$m_upper,
+  #                 ") \nb = (",
+  #                 min(sim_data$known_b),
+  #                 ",",
+  #                 max(sim_data$known_b),
+  #                       ")")) +
+  #   theme_bw()
   
   ggsave(plot = main_plot,
          filename = 
@@ -458,3 +493,98 @@ if(sim_data$distribution[1] == "PLB"){
   }
 }
 
+
+lambda_estimate_density_plot <- function(sim_data){
+  sim_data %>%
+    mutate(Model = factor(name,
+                          levels = 
+                            c("MLE",
+                              "ELBn", 
+                              "NAS"))) %>%
+    ggplot(
+      aes(x = estimate, 
+          y = Model,
+          fill = Model)) +
+    stat_halfeye(.width = c(0.66, 0.95)) +
+    scale_fill_manual(
+      values = c("#019AFF", "#FF914A", "#FF1984" )) +
+    theme_bw() +
+    geom_vline(aes(xintercept = known_b),
+               linetype = "dashed") +
+    labs(
+      x = "Lambda estimate") +
+    facet_wrap(~known_b,
+               scales = "free_x")
+}
+
+calc_relationship_estimate <- function(sim_data){
+  sim_data %>%
+  group_by(rep, name, known_relationship) %>%
+  nest() %>%
+  mutate(lm_mod =
+           map(data,
+               ~lm(estimate ~ env_gradient, data = .x))) %>%
+  mutate(tidied = map(lm_mod, broom::tidy)) %>%
+  unnest(tidied) %>%
+  filter(term == "env_gradient") %>%
+  select(-data, -lm_mod, -statistic)}
+
+
+relationship_density_plot <- function(relationship_estimate){
+  relationship_estimate %>%
+  mutate(Model = factor(name,
+                        levels = 
+                          c("MLE",
+                            "ELBn", 
+                            "NAS"))) %>%
+  ggplot(aes(x = estimate, 
+             y = Model,
+             fill = Model))+
+  stat_halfeye(.width = c(0.66, 0.95)) +
+  scale_fill_manual(
+    values = c("#019AFF",
+               "#FF914A",
+               "#FF1984" )) +
+  theme_bw() +
+  geom_vline(
+    aes(xintercept = known_relationship),
+    linetype = "dashed") +
+  labs(x = "Relationship estimate") +
+  NULL
+}
+
+
+main_plot <- function(sim_data){
+  sim_data %>%
+  mutate(Model = factor(name,
+                        levels = 
+                          c("MLE",
+                            "ELBn", 
+                            "NAS"))) %>%
+  ggplot(aes(x = env_gradient,
+             y = estimate, 
+             group = rep,
+             color = Model)) +
+  scale_color_manual(
+    values = c("#019AFF", "#FF914A", "#FF1984" )) +
+  stat_smooth(geom = "line",
+              method = "lm",
+              alpha = 0.15,
+              se = FALSE, 
+              color = "black") +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~Model)+
+  labs(title = sim_data$distribution,
+       subtitle = 
+         paste0("m_range =(",
+                sim_data$m_lower,
+                ",",
+                sim_data$m_upper,
+                ") \nb = (",
+                min(sim_data$known_b),
+                ",",
+                max(sim_data$known_b),
+                ")")) +
+  theme_bw() +
+  theme(legend.position="none")+
+  NULL}
