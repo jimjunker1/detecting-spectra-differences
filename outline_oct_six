@@ -18,3 +18,11 @@ make functions for different plots
 load data objects, make ggplot.objects, stitch multi-panel figures together
 
 Once functions made, plug them into simulation function
+
+# Scripts
+1_sim --> pull out SI
+1b_window --> main analyses?
+2b_ --> main plots
+AMD/ NEON_estimate --> empirical
+empirical plot --> stitch multi-panel
+Delete everything else?

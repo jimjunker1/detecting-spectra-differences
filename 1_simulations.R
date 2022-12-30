@@ -132,6 +132,8 @@ saveRDS(PLB_small_m, file = paste0("data_sim/",
                                substitute(PLB_small_m),
                                "_dat.rds"))
 
+#PLB_small_m <- readRDS("data_sim/PLB_small_m_dat.rds")
+
 plot_sim(PLB_small_m)
 rm(PLB_small_m)
 

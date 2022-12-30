@@ -69,7 +69,7 @@ dat <- bind_rows(n200, n500, n5000, n10000, n1000)
 #   NULL
 
 # lambda estimate halfeye ####
-dat %>%
+dat %>% 
   mutate(Model = factor(name,
                         levels = 
                           c("MLE",
@@ -102,19 +102,44 @@ ggsave(paste0("figures/",
 
 # regressions ####
 # what are the estimated relationships across gradient with varying n?
-dat %>%
-  ggplot(aes(x = env_gradient,
-             y = estimate, 
-             group = rep,
-             color = rep)) +
-  stat_smooth(geom = "line",
-              method = "lm",
+# dat %>%
+#   ggplot(aes(x = env_gradient,
+#              y = estimate, 
+#              group = rep,
+#              color = rep)) +
+#   stat_smooth(geom = "line",
+#               method = "lm",
+#               alpha = 0.15,
+#               se = FALSE)+
+#   geom_point() +
+#   facet_wrap(n~name,
+#              ncol = 3,
+#              labeller = label_both)+
+#   theme_bw()
+
+dat %>% 
+  mutate(Model = factor(name,
+                        levels = 
+                          c("MLE",
+                            "ELBn", 
+                            "NAS"))) %>%
+  ggplot(
+    aes(x = env_gradient, 
+        y = estimate, 
+        color = name,
+        group = rep)) +
+  stat_smooth(method = "lm",
+              se = FALSE, 
+              geom = "line",
+              size = 1.75,
               alpha = 0.15,
-              se = FALSE)+
+              color = "black") +
   geom_point() +
   facet_wrap(n~name,
              ncol = 3,
              labeller = label_both)+
+  scale_color_manual(
+    values = c("#FF914A", "#019AFF",  "#FF1984" )) +
   theme_bw()
 
 ggsave(paste0("figures/", 

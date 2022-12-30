@@ -56,18 +56,25 @@ library(tidyverse)
 
 # Abstract
 
-1.  Size spectra represent a fundamental attribute of community organization and are increasingly being used in assessments of fresh waters.
+1.  The distribution of body size in communities  is remarkably consistent across habitats and taxa and can be represented by size spectra.
 2.  Many methods have been proposed for constructing size spectra relationships, but recent work has shown that varied methods return biased estimates of relationship parameters, and different methods in fact are not estimating the same parameter. Despite this variability in estimates, it is unclear if the relative change across environmental gradients is consistent across methodologies. Here, we simulate data sets across an hypothetical environmental gradient and estimate the size spectra parameter (slope or exponent, depending on method) at each site, and, importantly, estimate the relationship of parameters across the hypothetical gradient. We also use two previously published body size datasets across an anthropogenic stress gradient and an environmental temperature gradient and assess how the conclusions of these studies would vary based on methods used.
 3.  We find that maximum likelihood methods always perform as well or better than common binning methods. Additionally, the variance in estimates using MLE methods is markedly reduced when compared to binning methods.
 4.  The uncertainty and variation in estimates when using binning methods is often greater than or equal to the variation previously published in experimental and observational studies, bringing into question the effect size of previously published results. However, re-analysis of two previously published datasets does not markedly alter the conclusions reached. Further study is needed to identify how and when these estimates may be biased, and when the general pattern of results can be considered to be "true".
 
 # Introduction
 
-Body size distributions are a fundamental characteristic of communities. The remarkable consistency of these relationships across spatiotemporal scales and habitat types has led them to be recommended as a "universal" indicator of ecological status (Petchey and Belgrano 2010)[@petchey2010]. Size metrics have commonly been used in marine systems, and are increasingly being applied to assess the condition of freshwater ecosystems (Martinez et al. 2016, Pomeranz 2018)[@martinez2016; @pomeranz2019].
+Body size distributions are a fundamental characteristic of communities. In general, size-abundance relationships are expected to scale with the value of -0.75 across all biological communities (Damuth 1981, 1991, 1998). This is thought to be a consequence of simple size-dependent metabolic constraints on organisms’ energy use predicted by the metabolic theory of ecology (Nee 1991, Brown et al. 2004). In a similar way $\lambda$ of size spectra is expected to be -2. The remarkable consistency of these relationships across spatiotemporal scales and ecosystems has led them to be recommended as a "universal" indicator of ecological status (Petchey and Belgrano 2010)[@petchey2010]. Deviations from the putative universal $\lambda$ have been reported, but little attention has been paid to whether these are systematic. 
 
-Individual size distributions (ISD, also referred to as abundance size spectra) are commonly used. Generally, there is a negative relationship between body size (M) and abundance (N). Theoretical and empirical data support this relationship being described as a simple power law with exponent $\lambda$ in the form of $N \sim M^{\lambda}$. Commonly, $N$ is the count of body sizes grouped into bins, and $\lambda$ is estimated from OLS regressions of log transformed data of $N$ and the mid point of the body size bin $M_{bin}$: $\log(N_{count}) = \lambda \log(M_{bin})$. Myriad binning methods have been proposed, including linear and logarithmic bin widths. Likewise, methods can rely on the absolute count in the bins as well as normalization techniques where the count is divided by the bin width (especially common with logarithmic binning). Alternatively, $\lambda$ can be estimated directly using maximum likelihood techniques.
+Systematic variation in size spectra would provide evidence against the universality of the MTE (Brown et al. 2004), with important consequences for our understanding of nature. 
 
-Previous work has shown that the estimates of $\lambda$ differ between MLE and OLS techniques. OLS methods are particularly sensitive to decisions made in the binning process. Simulation studies have shown that MLE offers consistently more accurate estimates of $\lambda$ (White et al. 2007, Edwards et al. 2017)[@white2007; @edwards2017], and reanalysis of empirical datasets also indicates that the conclusions are dependent on the methodology used (White et al. 2007, Edwards et al. 2020)[@white2007; @edwards2020]. However, recent empirical analysis of stream macroinvertebrate communities across the NAtional Ecological Observatory Network (NEON, USA) showed that while the estimates of $\lambda$ varied, the relative change across the environmental gradient was consistent regardless of method used (Pomeranz et al. 2022)[@pomeranz2022]. While there is a growing consensus that MLE methods offer more reliable estimates of $\lambda$, and binning methods result in biased estimates, it remains unclear if these biases are consistent and systematic or stochastic, and whether or not the relative change in ISD parameters is consistent across space and time. In other words, if the data within a study are all treated the same, does a relative change of OLS slope parameters of 0.1 coincide with a relative change of MLE estimates of 0.1? In order to answer this question, we simulate body size observations from bounded power law distributions with varied $\lambda$ exponents across a hypothetical environmental gradient and compare the results obtained using three different methodologies common in the literature. In addition, we re-analyze two previously published datasets of stream community body sizes across a stress and environmental gradient. We find that the MLE method more accurately estimates the site-specific $\lambda$ exponents as well as the relative change in exponents across the hypothetical gradient, as well as having smaller variation. The logarthmic binning methods generally perform well, but have larger confidence intervals around the estimates. However, the overall conclusions of previously published empirical data sets are not dependent on the method used.
+
+Individual size distributions (ISD (*sensu* White et al. 2007[@white2007]), also referred to as abundance size spectra) are one of the size-abundance relationships commonly used. ISDs show the relationship between the abundances of individual body size regardless of taxonomy. Generally, there is a negative relationship between individual body size (M) on the *x*-axis  and abundance (N) on the *y*-axis. Theoretical and empirical data support this relationship being described as a simple power law with exponent $\lambda$ in the form of $N \sim M^{\lambda}$. Commonly, $N$ is the count of body sizes grouped into bins, and $\lambda$ is estimated as the slope from OLS regressions of log transformed data of $N$ and the mid point of the body size bin $M_{bin}$: $\log(N_{count}) = \lambda \log(M_{bin})$. Myriad binning methods have been proposed, including linear and logarithmic bin widths. Likewise, methods can rely on the absolute count in the bins as well as normalization techniques where the count is divided by the bin width (especially common with logarithmic binning). Alternatively, $\lambda$ can be estimated directly using maximum likelihood techniques.
+
+Previous work has shown that the estimates of $\lambda$ differ between MLE and OLS techniques. OLS methods are particularly sensitive to decisions made in the binning process. Simulation studies have shown that MLE offers consistently more accurate estimates of $\lambda$ (White et al. 2008, Edwards et al. 2017), and reanalysis of empirical data also indicates that the conclusions are dependent on the methodology used (White et al. 2008, Edwards et al. 2020)[ @edwards2020]. However, recent empirical analysis of stream macroinvertebrate communities across the National Ecological Observatory Network (NEON, USA) showed that while the estimates of $\lambda$ varied, the relative change across the environmental gradient was consistent regardless of method used (Pomeranz et al. 2022)[@pomeranz2022]. While there is a growing consensus that MLE methods offer more reliable estimates of $\lambda$, and binning methods result in biased estimates, it remains unclear if these biases are consistent and systematic or stochastic, and whether or not the relative change in ISD parameters is consistent across space and time. In other words, if the data within a study are all treated the same, does a relative change of OLS slope parameters of 0.1 coincide with a relative change of MLE estimates of 0.1? 
+
+We had three primary objectives in this study: 1) how well do different methods estimate site-specific $\lambda$s? 2) Do the estimates of the hypothetical relationship obtained from different methods agree? and 3) Are the conclusions reached from previously published data sets dependent on the method used?
+
+In order to answer the first two questions, we simulate body size observations from bounded power law distributions with varied $\lambda$ exponents across a hypothetical environmental gradient and compare the results obtained using three different methodologies common in the literature. To answert the third question, we re-analyze two previously published data sets of stream community body sizes across a stress and environmental gradient, respectively. We find that the MLE method more accurately estimates the site-specific $\lambda$ exponents as well as the relative change in exponents across the hypothetical gradient, as well as having smaller variation around the estimates. The logarithmic binning methods generally perform well, but have larger confidence intervals around the site-specific estimates. In addition, the variation of the estimates of the hypothetical relationship obtained from the binning methods is dependent on the value of $\lambda$ used (under and over estimates steep and shallow $\lambda$, respectively). 
 
 # Methods
 
@@ -79,31 +86,56 @@ $$f(M) = CM^\lambda, M_{min} \le M \le M_{max} $$
 
 $M_{min} = 0.0026$ and $M_{max} = 1.2 *10^3$. These values are based on empirical body sizes of stream benthic communities reported in Pomeranz et al. (2020)[@pomeranz2022]. Our results are not dependent on the range of body sizes, and we show the results of other body size ranges in the supplemental information.
 
-For the main analysis, presented here, we sampled $n = 1000$ body sizes from distributions described by five different $\lambda$'s: (-1.5, -1.75, -2.00, -2.25, -2.5), such that our model for $\lambda$ is:
+## Site-specific $\lambda$ estimates
 
-$$\lambda = Norm(\alpha -0.5X, \sigma)$$
-
-Each value of $\lambda$ was assumed to come from a community across a hypothetical environmental gradient $X$. Values of $X$ for each community are uniformly distributed from -1 to 1. We repeated the data simulation 1000 times (reps). The main results presented here were not dependent on the range of *x*-values or the number of sites (supplemental information).
-
-### Sample size, $n$
-
-The number of observations in our simulations may bias the results. Therefore, we repeated the simulations described above, but varied the sample size $n$. We tested values of $n = 200, 500, 1000, 5000, 10 000$.
-
-### "No" relationship
-
-It is possible that our sampling or simulation framework could bias the results obtained. In order to assess whether or not our simulations are robust to this, we performed independent random samples from a bounded power law for five communities across a hypothetical gradient as described above, but we set $\lambda = -2$ for all five communities. Hence, we are simulating a scenario where the size spectra relationship is invariant to our hypothetical environmental gradient, and we should expect the estimated relationship coefficient $\beta_1 = 0$.
-
-## Finer resolution of $\lambda$ values
-
-For the main analysis, we were interested in determining whether or not the methods were able to detect relatively coarse changes to size spectra parameters, specifically, a change of 0.5 units across each value of $X$, or an absolute change in $\lambda$ values of 1.0 units. However, many seminal works on variation in size spectra relationships in freshwater are on a much finer scale (on the order 0f 0.1 to 0.25 units). Therefore, we performed simulations as described above, but varied $\lambda$ from -1.9 to -2.1 across the hypothetical environmental gradient. This equates to a know relationship coefficient of $\beta_1 = 0.1$ across the hypothetical gradient, and an absolute change of 0.2 units.
+We sampled $n = 1000$ body sizes from distributions described by five different $\lambda$'s: (-1.5, -1.75, -2.00, -2.25, -2.5). The values of $\lambda$ describe how quickly the abundance of large body sizes decline within a community, e.g., a value of -1.5 means there would be a relatively high number of large body sizes (shallow) whereas a value of -2.5 means there would be relatively very few large body sizes (steep). We used three different methods (described below) to estimate the value of $\lambda$. We repeated this process 1000 times (reps) and plot the distribution of values obtained for each method. 
 
 ## Estimation of Size spectra parameter $\lambda$
 
-For each sample of $M$ and each of the 1000 replicates, we estimated the exponent $\lambda$ using MLE methods modified from the the `sizeSpectra` package (Edwards et al. 2020). In addition, we use two common binning methods to estimate the OLS slope parameter in log-log space. For the first binning method, we created 6 equal logarithmic bins covering the range of body sizes. The count in each bin was normalized by dividing by the bin width. This method has been used by (refs here, I think a lot of Woodward's group uses this...) Throughout the manuscript, the normalized equal logarithmic binning method will be referred to as ELBn. The second method was similar to ELBn, but bins of Log~2~ widths are used. The count in each bin is normalized in the same way. This method has been used by [@pomeranz2019; @mcgarvey2019] and is referred to as the Normalized Abundance Spectrum (NAS). Previous work has investigated the biases in $\lambda$ estimates when using different methods (Edwards et al. (2017)[-@edwards2017], Edwards et al. 2020[-@edwards2020], White et al. 2008[-@white2007]). The focus of the present work is to investigate biases when estimating the relationship or relative change in parameters across an environmental gradient. Hence, we do not discuss the $\lambda$ estimates in the main text, but the results are presented in the Supplemental Information (**NOTE** I'm thinking about dropping this from SI. Might be too much info, and it's already been published on by Edwards. Does this add anything to the story??).
+For each sample of $M$ and each of the 1000 replicates, we estimated the exponent $\lambda$ directly using MLE methods modified from the the `sizeSpectra` package (Edwards et al. 2020). Throughout the manuscript, these estimates are referred to as MLE.
 
-## Estimation of relationship across gradient, $\beta_1$
+### Equal Logarithmic Bins: ELBn
 
-For each simulation replicate, we estimated how the size spectra parameters varied across the hypothetical gradient. Simple OLS regression were conducted in the form $\lambda_{estimate} ~ \beta_0 + \beta_1 * X$. The distribution of the relationship coefficient, $\beta_1$, were plotted compared to the known relationship.
+In addition, we use two common binning methods to estimate the OLS slope parameter in log-log space. It is important to note that the binning methods are estimating a slope ($\beta_{1}$) from an OLS regression analysis, and not $\lambda$ directly. However, in the interest of clarity, we will refer to all estimates as $\lambda$ regardless of the method used, and reserve the term $\beta_{env}$ to refer to the estimate of the size spectra relationships across the hypothetical environmental gradient. 
+
+For the first binning method, we created 6 equal logarithmic bins covering the range of body sizes. This method has been used extensively in previous studies (for example: Perkins et al. (2018), Martinez et al. (2016), Dossena et al. (2012)). In the present study, the count in each bin was normalized by dividing by the bin width to account for the unequal width of the bin sizes. The process of normalizing shifts the estimate by 1. In other words, an un-normalized estimate of -0.75 would result in an estimate of -1.75 when normalizing the data (Sprules and Barth 2016, Edwards et al. 2018, Pomeranz et al. 2022). Throughout the manuscript, the normalized equal logarithmic binning method will be referred to as ELBn. 
+
+### Log~2~ Bins: NAS
+The second method was similar to ELBn, but bins of Log~2~ widths are used. The number of bins is dependent on the size ranges present in the data. When working with empirical data with different size ranges this can alter the number of bins per site. However, since the data here were simulated from a known size range, the number of bins for each site is identical. The count in each bin is normalized in the same way. This method has been  used (Jennings & Blanchard, 2004; Jennings, Warr, & Mackinson, 2002; Sprules and Barth 2016, @pomeranz2019; @mcgarvey2019) and is referred to as the Normalized Abundance Spectrum (NAS). 
+
+For the two binning methods, simple OLS regression were conducted in the form $Log_{10}(N) = \beta_0 + \beta_1 * Log_{10}(M)$. Where $\beta_{1}$ is considered to be the $\lambda_{estimate}$.
+
+
+## Variation in $\lambda$ Across a Gradient
+
+### Hypothetical relationshiop of -0.5
+
+Previous work has investigated the biases in $\lambda$ estimates when using different methods [-@edwards2017, @edwards2020, @white2007]. However, the focus of the present work is to investigate biases when estimating the relationship parameters across an environmental gradient. 
+
+To do this, we again sampled body sizes from distributions described by five different $\lambda$'s. However, because the estimates from the binning methods varied depending on the value of $\lambda$ (see results), we chose three different "windows" of lambda values. The three windows were steep ($\lambda = [-1.50,~ -1.75,~ -2.00,~ -2.25, -2.50]$), medium ($\lambda = [-1.00,~ -1.25,~ -1.50,~ -1.75,~ -2.00]$), and shallow (($\lambda = [-0.50,~ -0.75,~ -1.00,~ -1.25,~ -1.50]$).
+
+**NOTE** This MS seems to be getting long. Possibly present "medium" window in main results, and include other windows in SI
+
+Each sample of body sizes from different $\lambda$ values was assumed to come from a community across a hypothetical environmental gradient $X$. Values of $X$ for each community are uniformly distributed from -1 to 1. For each $\lambda$ "window", the relative change in $\lambda$ values ($\beta_{env}$) across the gradient is equal to -0.5, such that our model is:
+
+**JEFF** Is this correct? for some reason this seems wrong to me. 
+
+$$\beta_{env} = Norm(\alpha -0.5X,~\sigma)$$
+
+We repeated the data simulation 1000 times (reps). The main results presented here were not dependent on the range of *x*-values or the number of sites (supplemental information).
+
+### Varying Hypothetical Relationship
+
+Finally, we also varied the relationship ($\beta_{env}$) across the hypothetical gradient. We tested $\beta_{env}$ values of 0, -0.25, and -0.5 by sampling 5 body sizes communities uniformly distributed across the following sets of $\lambda$ values: [-1.5], [-1.25, -1.75], [-1, -2]. 
+
+
+## Estimation of relationship across gradient, $\beta_{env}$
+
+For each simulation replicate and size spectra method, we estimated how the size spectra parameters varied across the hypothetical gradient. We did this by performing simple OLS regression of the $\lambda_{estimate}$ across the hypothetical gradient ($X$):
+
+$$\lambda_{estimate} = \beta_0 + \beta_{env} * X$$
+
+The distribution of the relationship coefficient, $\beta_{env}$, were plotted compared to the known relationship.
 
 ## Empirical Data
 
@@ -117,63 +149,40 @@ The data used in this manuscript is already publicly available (Pomeranz et al. 
 
 # Results
 
+# $\lambda$ estimates
+
+There was considerable variation in the $\lambda$ estimate across methodologies (Figure 1). The distribution of estimates from the MLE method was almost always symmetrical and centered at the known value of $\lambda$ (Figure 1, blue distribution and dashed line). The distribution of estimates from the binning methods were generally wider, and sometimes showed assymetrical distributions. 
+
+![Figure 1. Distribution of Lambda estimates by method (color) from random samples of body sizes from bounded power law distributions with varying exponents (-2.5, -0.5). The figure is facetted by the known lambda parameter (facet title) and is also shown as the dashed line in each facet.](figures/est_lambda_est_b_density.png)
+
+Furthermore, the binning methods systematically over estimated steep size spectra relationships ($\lambda = ~\sim-2.5~to-1.5$, Figure 2), and slightly underestimated shallow size spectra relationships ($\lambda = ~\sim-0.5$). This finding was more pronounced in the NAS method compared with the ELBn method.  
+
+![Plot of the known and estimated lambda from different methods (color). The dashed line is the 1:1 line, and almost perfectly matches the MLE (Blue) estimate. The two binning method cross the 1:1 line, meaning they systematically underestimate shallow lambdas, and over estimate steeper lambdas.](figures/known_est_b_line.png)
+
+
+
 ## Relationship across the hypothetical environmental gradient
 
-![Relationship estimates across the hypothetical gradient for each replicate. Each panel is a different method for estimating the size spectra parameter.](figures/PLB_sim_main.png) 
+### $\lambda$ "windows"
 
-![alternate plot version; I think I like this one better. What are your thoughts on which you prefer??](figures/PLB_main_v2.png)
+Because of the markedly different performance of the two binning methods at steep and shallow values of lambdas, we first investigated how well the methods capture a known relationship of $\beta_{env} = -0.5$ across a hypothetical environmental gradient. The lambda "windows" are steep (-2.5, -1.5), medium (-2, -1) and shallow (-1.5, -0.5). 
 
-The distribution of $\beta_1$ estimates from MLE method were the most accurate and precise, and the NAS method was the least accurate and precise (Table *xx*). The median estimates for all methods were closer to the known relationship. All of the methods produced estimate distributions with long right tails, but this pattern was greater in the ELBn and NAS methods (e.g., SD for ELBn and NAS methods were 2-3x larger, Figure *xx* Halfeye plots).This result was consistent across simulation parameters, including sample size, number of sites, and $\lambda$ values.
+![Distribution of relationship estimates ($beta_{env}$) in three different "windows" of lambda values. The dashed vertical line is the known relationship value of -0.5.](figures/lambda_angle_plot.png)
 
-\newpage
 
-![Halfeye plots for the estimated relationship coefficient estimates across 1000 replicates and three different methods. The point below each distribution plot is the median estimate, the thick and thin bars represent the 66th and 95th percentile, respectively. Vertical line is the known relationship. The median estimate for the MLE method was closest to the known relationship, and had the narrowest distribution across replicates.](figures/PLB_sim_relationship_density.png)
+The distribution of relationship estimates from the MLE method (Figure 3, blue) is approximately centered at the known relationship value in each of the "windows". The distribution is widest in the "steep" window, but is still markedly narrower than the binning methods. In addition to having much wider distributions, the binning methods systematically overestimate the known relationship.
 
-\newpage
+### Varying the Known Relationship
 
-```{r, echo=FALSE, warning=FALSE}
-# will turn these into "real" formatted tables if we decide they're useful
-read.csv("results/PLB_sim.csv") %>%
-  mutate(Model = name,
-         mean = mu_slope) %>%
-  select(Model, mean, p50, p25, p975) %>%
-  mutate_at(vars(-Model), funs(round(., 3))) %>%
-  arrange(p50, p975)
-```
+Finally, we were interested in finding if the three methods performed differently with varying values of the known relationship. Here, we present estimates from each method when the known relationship ($\beta_{env}$) across the hypothetical gradient was -0.5, -0.25, and 0, respectively (Figure 4). 
 
-![Individual regression estimates across the hypothetical gradient based on sample size (rows) and methodology used (columns). (match this figure to "new" style if we like that better)](figures/n_vary_main.png)
 
-\newpage
+![regressions for three different known relationship values: beta = 0, 0.25, and 0.5](figures/vary_beta_plot.png)
 
-## No relationship
+Likewise, we also present the distribution of the $\beta_{env}$ relationship estimates (Figure 5). All the methods perform reasonably well when no relationship is present. The performance of the binning methods (median values) declines, with relationships being systematically over estimated. Likewise, the width of the distributions increases with stronger relationships across a hypothetical gradient. However, the distribution of estimates from the MLE method is nearly always centered at the known value, and has markedly narrower distributions. 
 
-All of the methods performed similarly when there was no relationship across the hypothetical gradient. The mean $\beta_1$ estimates for all three methods ranged from -0.0005 to 0.0002. Although the distributions were closely centered on 0, the distribution of coefficient estimates was much wider for the two binning methods; the 95th percentile of the MLE distributions is narrower than the 66th percentiles for the NAS and ELBn methods.
+![Distribution of relationship estimates (beta_1) when estimating from different known relationships](figures/vary_beta_density_plot.png)
 
-![Individual regression estimates when no relationship exists across the hypothetical environmental gradient. The methods are separated by rows. The median for all methocs is approximately zero, but the distribution for the MLE method is narrower than the two binning methods.](figures/PLB_static_b_relationship_density.png)
-
-```{r, echo=FALSE, warning=FALSE}
-read.csv("results/PLB_static_b.csv") %>%
-  mutate(Model = name,
-         mean = mu_slope) %>%
-  select(Model, mean, p50, p25, p975) %>%
-  mutate_at(vars(-Model), funs(round(., 3))) %>%
-  arrange(p50, p975)
-```
-
-## Small variation in lambda
-
-The performance of all methods to detect small variation in the $\lambda$ parameter (between -1.9 to -2.1) across the environmental gradient was also investigated. The median $\beta_1$ coefficient estimates for the MLE method was -0.1, which exactly matched the value for the hypothetical relationship, while the other two methods both had median estimates of -0.09. The upper 97.5 percentile of the distribution was below 0 for the MLE method, meaning that most of the estimates had the correct sign. In contrast, the upper 97.5 percentile for both the NAS and ELBn methods were greater than 0 at 0.027 and 0.052, respectively. (Figure 4).
-
-![Distribution of the estimated relationship for each method. Here, $\lambda$ varied from -1.9 to -2.1, with a known relationaship of -0.1 across the gradient indicated by the dashed vertical line. The distribution of relationship estimates was approximately centered at the known relationship for all methods, with a narrower distribution observed for the MLE estimates.](figures/PLB_sim_small_relationship_density.png)
-
-```{r, echo=FALSE, warning=FALSE}
-read.csv("results/PLB_sim_small.csv") %>%
-  mutate(Model = name,
-         mean = mu_slope) %>%
-  select(Model, mean, p50, p25, p975) %>%
-  mutate_at(vars(-Model), funs(round(., 3))) %>%
-  arrange(p50, p975)
-```
 
 ## Empirical data
 
@@ -189,52 +198,26 @@ The $\beta_1$ coefficient estimates for the AMD data are all positive and of rel
 
 Similar to the AMD results, the $\beta_1$ coefficient estimates for the NEON data are all negative and have similar magnitudes across methods. The MLE estimate is once again the smallest (-0.006 $\pm$ 0.001 SD). The NAS and ELBn methods are larger at -0.004 $\pm$ 0.002, and -0.002 $\pm$ 0.002, respectively. Although the estimates are similar and have a small magnitude, the range of the gradient in this data is larger (\~30$\circ$C), meaning that the absolute change in $\lambda$ estimates varies by 0.11 units depending on the methods used (range of absolute change across gradient: 0.06 to 0.17). 
 
-## Simulating shallower lambdas
-
-Estimates of the relationship between lambda and a hypothetical gradient varied depending on the method used. However, interpretations of empirical data were broadly consistent across methodologies. Upon closer inspection, the values of size spectra parameters in the empirical data were considerably shallower than -2. Given that we found the performance of all methods increased with shallower $\lambda$'s we wanted to investigate how the methods performed with simulated values closer to the empirical estimates of parameters describing size spectra relationships in streams. Therefore, we repeated the simulation process as in the main analysis, but used $\lambda$ values ranging from -1.1 to -1.5, with a known relationship of $\beta_1 = -0.2$
-
-\newpage
-
-![Relationship estimates across the hypothetical gradient for each replicate. Each panel is a different method for estimating the size spectra parameter. (match to "new" style if needed)](figures/shallow_lambda_main.png)
-
-We found generally less variability in the relationship estimates ($\beta_1$) across a gradient of distributions described with shallower $\lambda$ parameters. However, the median MLE estimate was once again closest to the hypothetical relationship and had the narrowest distribution. The median ELBn estimate was close to the hypothetical relationship but had a slightly wider distribution. Finally, 95% of the NAS estimates were greater than the hypothetical relationship. In general, the distributions from the different methodologies followed the same overall pattern, with the MLE estimates being the smallest, and the binning methods being larger (i.e., more positive).
-
-![Distribution of relationship coefficient estimates. Vertical line is the known relationship. All methods under estimate the value, but the mean magnitude and distribution of values is greater for the ELBn and NAS methods. (not sure why this is such different proportions, need to re plot with right dimensions)](figures/PLB_shallow_lambda_relationship_density.png)
-
-```{r, echo=FALSE, warning=FALSE}
-read.csv("results/shallow_lambda.csv") %>%
-  mutate(Model = name,
-         mean = mu_slope) %>%
-  select(Model, mean, p50, p25, p975) %>%
-  mutate_at(vars(-Model), funs(round(., 3))) %>%
-  arrange(p50, p975)
-```
-**NOTE** Not sure if these tables are usful or not. Shows same information as figures, but might be easier to see the quantitative values instead of estimating from plot
-
-\newpage
 
 # Discussion
 
-Measuring parameters describing the decline in abundance with increasing body size in communities is being done with increasing frequency across ecology. Previous work has investigated the accuracy and inherent biases associated with different estimation methods. However, how these inaccuracies and biases compound across environmental gradients remains uncertain, making it difficult to detect variation in size spectra parameters across environmental gradients with confidence. Here, we sampled body sizes from known distributions with varying parameters ($\lambda$) and estimated the coefficient of the relationship ($\beta_1$) across a hypothetical gradient in order to assess how the results would vary depnding on the method used. Likewise, we compared how the interpretation of previously published results could change depending on the methodology used to estimate the relationship.
+The relationship between body size and abundance has been extensively studied in a wide range of taxa inhabiting both terrestrial and aquatic ecosystems (reviewed by Brown 1995, Gaston and Blackburn 2000, White et al. 2007). Empirical patterns are remarkably consistent, and can be explained by the metabolic theory of Ecology (Brown et al. 2004).  Measuring parameters describing the decline in abundance with increasing body size in communities is being done with increasing frequency across ecology. Previous work has investigated the accuracy and inherent biases associated with different estimation methods. However, how these inaccuracies and biases compound across environmental gradients remains uncertain, making it difficult to detect variation in size spectra parameters across environmental gradients with confidence. Here, we sampled body sizes from known distributions with varying parameters ($\lambda$) and estimated the coefficient of the relationship ($\beta_{env}$) across a hypothetical gradient in order to assess how the results would vary depending on the method used. Likewise, we compared how the interpretation of previously published results could change depending on the methodology used to estimate the relationship.
 
-Generally, the estimate from the MLE method was always closer to the known $\lambda$ value, and resulted in the most accurate $\beta_1$ coefficient estimate for the hypothetical relationship in simulated data, and always had the smallest variation around the estimate.
+Generally, the estimate of the size spectra parameter from the MLE method was always closer to the known $\lambda$ value, regardless of how steep or shallow the $\lambda$ exponent was. This is in agreement with Edwards et at. (2017) which found that the MLE estimate more consistently recovered known $\lambda$ values ranging from -2.5 to -0.5. We further this work by discovering that the magnitude of the error associated with the two binning methods increases as the $\lambda$ value moves away from $\sim$ -1.  
 
-Binning methods are easy to use and interpret, which most likely accounts for their wide use in ecological studies. However, aggregating individuals into logarithmic bins removes a large source of the variation within the data by collapsing body size variation into a single values within bins. For example, all individuals placed into a bin that ranges from 2-4 grams of mass are all treated as having a mass of 3 grams, the midpoint of that bin. Likewise, a single abundance value is taken for this bin, despite that fact that there is almost certainly variation in the abundance of individuals that weigh \~2 grams or \~4 grams. By homogenizing the data in this way, it seems that binning methods will always produce noisier results than MLE from the binning process alone, since binning is akin to deleting information that the model could otherwise use. One of the benefits of using MLE is that all data points are retained for use within the model.
+Likewise, the MLE method also resulted in the most accurate $\beta_{env}$ estimates for the hypothetical relationship in simulated data regardless of the $\lambda$ "window" investigated. Furthermore, the variation around the estimate was always smallest with the MLE method. However, the variation in the MLE estimate did increase with steeper $\lambda$ "windows". This is not surprising, however because steep relationships like this make it very unlikely to sample the largest body sizes, and capturing the "true" relationships without the full range of body sizes present is more difficult (Edwards et al. 2017). Despite this, the MLE method is nearly always the best option to use, likely because all the data are used in the analysis. 
 
-The variation in estimated relationships across the empirical datasets varied by ~0.1 units depending on the method used. At first glance this may not appear to be a concerning magnitude of variation. However, when one considers the range of variation reported in many seminal works on size spectra relationships in streams is ~0.1-0.2 (SI Table *xx*), it is apparent that many of these results may be dependent on the method used. 
+Binning methods are easy to use and interpret, which most likely accounts for their wide use in ecological studies. However, aggregating individuals into logarithmic bins removes a large source of the variation within the data by collapsing body size variation into a single value within each bin. For example, all individuals placed into a bin that ranges from 2-4 grams of mass are all treated as having a mass of 3 grams, the midpoint of that bin. Likewise, a single abundance value is taken for this bin, despite that fact that there is almost certainly variation in the abundance of individuals that weigh \~2, \~3, or \~4 grams. By homogenizing the data in this way, it seems that binning methods will always produce noisier results than MLE from the binning process alone, since binning is akin to deleting information that the model could otherwise use. One of the benefits of using MLE is that all data points are retained for use within the model.
 
-The performance of all methods improved as sample size increases, and as the exponent of the size spectra relationship gets larger (more shallow). As either or both of these variables change, the difference in estimated relationship coefficients declines across the methods. This is particularly interesting given the fact that both empirical data sets of stream communities examined here are shallower than the expected relationship of $\lambda = -2$, and the conclusions of the change in size spectra relationships across the gradients are not dependent on method used. If communities under study are in fact described by shallower exponents, the method used may not be critical in the conclusions reached. However, the MLE method performs as well or better than the two binning methods examined here under all contexts and should be the preferred method in future studies. At a minimum, future studies should report MLE estimates to ensure that the results are not dependent on the methodology used.
+The variation in estimated relationships across the empirical datasets varied by ~0.1 units depending on the method used. At first glance this may not appear to be a concerning magnitude of variation. However, when one considers the range of variation reported in many seminal works on variation in size spectra relationships is ~0.1-0.2 (SI Table *xx*), it becomes clear how important an error in estimates of this magnitude is. 
 
-Despite the drop in performance with reduced variation in $\lambda$ values, the estimated relationship coefficient was generally in the correct direction and of a similar magnitude. This suggests that previously reported significant changes in size spectra parameters across environmental gradients and in experimental manipulations are plausible. Given that all of the data within a study is treated identically, the the over all change in size spectra parameters is likely reasonable. However, the biases and inconsistencies in relationship estimates presented here suggest that it would be difficult if not impossible to compare the relative changes across different published studies which use different methods. Publication of individual body size data with future studies of size spectra relationships would greatly aid in our ability to generalize changes to this fundamental aspect of community organization across spatiotemporal scales and in response to environmental conditions.
+Despite the differences in magnitude of the empirical relationship coefficients, they were generally in the correct direction and of a similar magnitude. This suggests that previously reported significant changes in size spectra parameters across environmental gradients and in experimental manipulations are plausible. Given that all of the data within a study is treated identically, the over all change in size spectra parameters is likely reasonable. However, the biases and inconsistencies in relationship estimates presented here suggest that it would be difficult if not impossible to directly compare the relative changes across different published studies which use different methods. However, the relatively systematic error of $\lambda$ estimates across known exponents suggests that it may be possible to correct previous estimates onto the same scale (Figure 2).  
 
-**NOTE** not sure if the idea below belongs in this paper or not, but it's something I've been thinking about for a while. I'm using this as an excuse to write out my thoughts and to see what y'all think about it. Maybe it's another paper to write in the future?
-
-
-An interesting finding is that the empirical data sets used here were quite a bit shallower than is expected based on theory, and that what has been observed empirically in marine systems. There are two, non-mutually exclusive, possible explanations for this: 1) freshwater streams are more dependent on detrital resources, 2) streams are effectively 2D systems, whereas marine systems are 3D. Blanchard et al.  (2009) observed that benthic marine communities had shallower slopes than pelagic communities, and that this was likely due to a stronger reliance on a shared detrital basal resource in the benthic community, whereas the pelagic community was largely driven by energy transfer through predator-prey interactions. The importance of allochthonous resources in stream ecosystems has long been recognized (Vannote et al. 1980). The stream data here largely comes from low order, headwater streams which may be reasonably considered to be driven by allochthonous resources. It is possible that the communities sampled here are structured based on a shared basal resource, and that the importance of predator-prey interactions is reduced. An alternate hypothesis is the relative dimensionality of search space in benthic and pelagic systems. Consumption rates and interaction strenghts have been shown to vary markedly based on search dimensionality. Consumers generally encounter resources more frequently in 3D environments (i.e., aerial, pelagic) than in 2D environments (i.e., benthic, terrestrial), and lead to stronger consumption rates and interaction strengths. Likewise, it has been hypothesized that the scaling exponent for mass-specific search rates may vary based on search space dimensionality instead of being set at approximately 0.75 (Pawar, Dell, Savage, 2012). 
+Despite this possibility, publication of individual body size data with future studies of size spectra relationships would greatly aid in our ability to generalize changes to this fundamental aspect of community organization across spatiotemporal scales and in response to environmental conditions.
 
 ## Concluding Remarks
 
-Both of the binning methods can perform as well as MLE under certain circumstances (large sample size, shallow $\lambda$). However, it would be unlikely for a researcher to know if this was the case beforehand. Furthermore, in order to confirm this result, MLE methods would likely need to be employed. With the publication of the *sizespectra* package [-@edwards2017], producing MLE estimates of size spectra parameters is a relatively easy task. Therefore, we recommend using this in all future studies of size spectra relationships.
+The MLE method outperformed both of the binning methods under nearly any measure. With the publication of the *sizespectra* package [-@edwards2017], producing MLE estimates of size spectra parameters is a relatively easy task. Therefore, we recommend using this in all future studies of size spectra relationships.
 
 We reiterate the recommendations of White et al. (2007)[-@white2007], Sprules and Barth (2016)[-@sprules2016] and Edwards et al. (2017)[-@edwards2017] to estimate size spectra relationships using MLE methods due to their superior performance in nearly every context. Furthermore, we strongly encourage authors to publish individual size data whenever possible. This will allow for the consistent re-analysis of existing data sets as methodologies develop and improve. This will aid in the ability for size spectra work to be synthesized between research groups and across scales.
 
@@ -252,31 +235,9 @@ We reiterate the recommendations of White et al. (2007)[-@white2007], Sprules an
 ```{=tex}
 \beginsupplement
 ```
-## Range of body sizes, $M$
+# $\lambda$ and relationship estimates
 
-**NOTE** udate all plots to be consistent with main text
-
-![Individual regressions for five sites across a hypothetical gradient with a known relationship of 0.5. Range of body sizes is reduced and is from 1, to 100.](figures/PLB_small_m_main.png)
-
-\newpage
-
-![Distribution of estimated relationship ($\beta_1$) coefficient's for five sites across a hypothetical gradient with known value of 0.5. Range of body sizes is reduced and is from 1, to 100.](figures/PLB_small_m_relationship_density.png)
-
-\newpage
-
-## Large environmental gradient
-
-![Individual regressions for five sites across a hypothetical gradient with a known relationship of 0.5. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_main.png)
-
-\newpage
-
-![Distribution of estimated $\lambda$ coefficient for five sites across a hypothetical gradient with known values. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_est_b_density.png)
-
-\newpage
-
-![Distribution of estimated relationship ($\beta_1$) coefficient's for five sites across a hypothetical gradient with known value of 0.5. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_relationship_density.png)
-
-\newpage
+In the main analysis, we simulate body size data from bounded power law distributions while varying the $\lambda$ exponent which describes the distribution. For the results presented in the main text, we held the number of sites at 5, scaled the environmental gradient from -1 to 1, and set the minimum and maximum body sizes to $0.0026$ and $1.2 *10^3$ respectively. Here, we plot the results of varying the number of sites (3, 10), increasing the scale of the environmental gradient (-100 to 100) and decreasing the range of body sizes (min = 1, max = 100). Generally, the results reported in the main manuscript are robust to changing these parameters: the MLE estimate is nearly always closer to the known parameters, and the variation in these estimates is usually smaller than the binning methods.
 
 ## Varying number of sites
 
@@ -308,55 +269,43 @@ We reiterate the recommendations of White et al. (2007)[-@white2007], Sprules an
 
 \newpage
 
-## Sample size
+## Large environmental gradient
+
+![Individual regressions for five sites across a hypothetical gradient with a known relationship of 0.5. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_main.png)
+
+\newpage
+
+![Distribution of estimated $\lambda$ coefficient for five sites across a hypothetical gradient with known values. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_est_b_density.png)
+
+\newpage
+
+![Distribution of estimated relationship ($\beta_1$) coefficient's for five sites across a hypothetical gradient with known value of 0.5. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_relationship_density.png)
+
+\newpage
+
+## Range of body sizes, $M$
+
+![Individual regressions for five sites across a hypothetical gradient with a known relationship of 0.5. Range of body sizes is reduced and is from 1, to 100.](figures/PLB_small_m_main.png)
+
+\newpage
+
+![Distribution of estimated relationship ($\beta_1$) coefficient's for five sites across a hypothetical gradient with known value of 0.5. Range of body sizes is reduced and is from 1, to 100.](figures/PLB_small_m_relationship_density.png)
+
+
+\newpage
+
+## Sample size, $n$
+
+The number of observations in our simulations may bias the results. Therefore, we repeated the simulations described above, but varied the sample size $n$. We tested values of $n = 200, 500, 1000, 5000, 10 000$. Results of this analysis are presented in the Supplemental Information. 
+
+![Individual regression estimates across the hypothetical gradient based on sample size (rows) and methodology used (columns). (match this figure to "new" style if we like that better)](figures/n_vary_main.png)
 
 ![Distribution of size spectra parameter estimates. Vertical line is the known parameter (dashed line) wich describes the bounded power law distribution from which the body size estimates were sampled. As n increases (top to bottom) and $\lambda$ increases (left to right), the accuracy of the estimate improves across all methods.](figures/n_vary_est_b.png)
 
 \newpage
 
-![Individual regressions when varying sample size](figures/n_vary_main.png)
-
-\newpage
 
 ![Distribtuion of the relationship coefficients with varying sample size](figures/n_vary_relationship_density.png)
-
-\newpage
-
-## $\lambda$ and relationship estimates
-
-**NOTE** I'm considering dropping the $\lambda$ estimate plots from the manuscript. I think it's too much info, but if it adds to the story I'm happy to leave it in. **END**
-
-In the main analysis, we simulate body size data from bounded power law distributions while varying the $\lambda$ exponent which describes the distribution. For the results presented in the main text, we held the number of sites at 5, scaled the environmental gradient from -1 to 1, and set the minimum and maximum body sizes to $0.0026$ and $1.2 *10^3$ respectively. Here, we plot the results of varying the number of sites (3, 10), increasing the scale of the environmental gradient (-100 to 100) and decreasing the range of body sizes (min = 1, max = 100). Generally, the results reported in the main manuscript are robust to changing these parameters: the MLE estimate is nearly always closer to the known parameters, and the variation in these estimates is usually smaller than the binning methods.
-
-\newpage
-
-### Number of sites = 3
-
-![Distribution of estimated $\lambda$ coefficient across a hypothetical gradient with known values (dashed line). The number of sites is reduced to 3, compared with 5 sites presented in the main anaysis.](figures/PLB_3_sites_est_b_density.png)
-
-\newpage
-
-![Relationship estimate](figures/PLB_3_sites_relationship_density.png)
-
-\newpage
-
-### Number of sites = 10
-
-![Distribution of estimated $\lambda$ coefficient across a hypothetical gradient with known values(dashed line). The number of sites is increased to 10, compared with 5 sites presented in the main anaysis.](figures/PLB_10_sites_est_b_density.png)
-
-\newpage
-
-![Relationship estimate](figures/PLB_10_sites_relationship_density.png)
-
-\newpage
-
-### Environmental Gradient
-
-![Distribution of estimated $\lambda$ coefficient for five sites across a hypothetical gradient with known values (dashed line). The range of the environmental gradient was increased (-100 to 100).](figures/PLB_large_x_est_b_density.png)
-
-\newpage
-
-![Relationship estimate](figures/PLB_large_x_relationship_density.png)
 
 \newpage
 

@@ -27,7 +27,7 @@ dw_range = range(amd_dat$dw, na.rm = TRUE)
   unnest(cols = method_compare))
 
 # plot parameter estimates (slope or exponent) across AMD gradient
-amd_result %>%
+amd_plot <- amd_result %>%
   mutate(Model = factor(name,
                         levels = 
                           c("MLE",
@@ -42,15 +42,17 @@ amd_result %>%
   scale_color_manual(
     values = c("#019AFF", "#FF914A", "#FF1984" )) +
   theme_bw() +
-  labs(title = "Change in exponent across an AMD gradient", 
-       x = "AMD gradient (PCA)",
-       y = "Slope/exponent estimate") +
+  labs(title = "AMD data", 
+       x = "AMD gradient",
+       y = "Parameter estimate") +
   theme(legend.position = "none")
+
 # save the plot
-ggsave("figures/AMD_plot.png",
-       width = 1600,
-       height = 753, 
-       units = "px")
+saveRDS(amd_plot, "figures/AMD_plot.rds")
+# ggsave("figures/AMD_plot.png",
+#        width = 1600,
+#        height = 753, 
+#        units = "px")
 
 # estimate the beta_1_ relationship across the gradient
 amd_relationship <- amd_result %>%
@@ -71,7 +73,7 @@ amd_relationship %>%
   write_csv("results/AMD_estimates.csv")
 
 # plot the mean \pm STD.E of the estimated relationship across the gradient based on method used. 
-amd_relationship %>%
+amd_relationship_plot <- amd_relationship %>%
   mutate(Model = factor(name,
                         levels = 
                           c("MLE",
@@ -87,34 +89,8 @@ amd_relationship %>%
     values = c("#019AFF", "#FF914A", "#FF1984" )) +
   theme_bw() +
   labs(x = "Relationship estimate",
-       y = "Method",
-       title = "Mean +/- Std. Error Beta across AMD gradient") +
+       y = "Method") +
   theme(legend.position="none")
 
-ggsave("figures/amd_relationship.png",
-       height = 3,
-       width = 5)
+saveRDS(amd_relationship_plot, "figures/AMD_relationship.rds")
 
-
-
-
-
-# estimate by sample ------------------------------------------------------
-# don't think I'm doing this anymore...
-# 
-# # need to re-export data from AMD project and include "smaple" number
-# 
-# (amd_result <- amd_dat %>%
-#    # mutate(date = as.Date(collectDate)) %>%
-#    group_by(site, pca1) %>%
-#    #filter(siteID == "CARI") %>%
-#    # create list-column
-#    nest() %>%
-#    mutate(method_compare =
-#             map(data,
-#                 compare_slopes,
-#                 rsp_var = "dw",
-#                 dw_range = dw_range)) %>%
-#    ungroup() %>%
-#    select(-data) %>%
-#    unnest(cols = method_compare))
