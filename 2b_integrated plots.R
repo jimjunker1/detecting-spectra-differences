@@ -34,6 +34,8 @@ angles <- bind_rows(steep = angle_A,
                     shallow = angle_C,
                     .id = "id")
 
+saveRDS(angles, file = "data_sim/angles.rds")
+
 lambda_window <- angles %>%
   mutate(Model = factor(name,
                         levels = 
@@ -71,6 +73,9 @@ rel_data <- bind_rows(beta_0 = rel_0,
                       beta_025 = rel_025,
                       beta_05 = rel_05,
                       .id = "id")
+
+saveRDS(rel_data, file = "data_sim/rel_data.rds")
+
 rel_data %>%
   mutate(Model = factor(name,
                         levels = 
@@ -110,8 +115,11 @@ ggsave(filename = "figures/vary_beta_plot.png",
        height = 6,
        width = 6)
 
-rel_data %>% 
-  calc_relationship_estimate(.) %>%
+
+rel_data_summary = rel_data %>% calc_relationship_estimate(.)
+saveRDS(rel_data_summary, file = "data_sim/rel_data_summary.rds")
+
+rel_data_summary %>%
   mutate(Model = factor(name,
                         levels = 
                           c("MLE",
@@ -157,7 +165,7 @@ est_lambda %>%
              linetype = "dashed") +
   labs(
     x = "Lambda estimate") +
-  facet_wrap(~known_b)
+  facet_wrap(~known_b, scales = "free")
 
 ggsave(filename = "figures/est_lambda_est_b_density_fixed_x.png",
        units = "in", 
