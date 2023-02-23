@@ -165,9 +165,13 @@ est_lambda %>%
              linetype = "dashed") +
   labs(
     x = "Lambda estimate") +
-  facet_wrap(~known_b, scales = "free")
+  facet_wrap(~known_b, scales = "free") +
+  scale_y_discrete(breaks=c("MLE",
+                            "ELBn", 
+                            "NAS"),
+                   labels= NULL)
 
-ggsave(filename = "figures/est_lambda_est_b_density_fixed_x.png",
+ggsave(filename = "figures/est_lambda_est_b_density.png",
        units = "in", 
        height = 6,
        width = 6)

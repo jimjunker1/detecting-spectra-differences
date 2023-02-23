@@ -42,6 +42,7 @@ est_lambda <- sim_result(n = 1000,
 plot_sim(est_lambda)
 
 # match colors, jitter points, increase alpha, try GAM/loess, 
+# est_lambda <- readRDS("data_sim/est_lambda_dat.rds")
   
 (known_est_b_line <- est_lambda %>%
   mutate(Model = factor(name,
@@ -54,18 +55,22 @@ plot_sim(est_lambda)
            y = estimate, 
            color = name)) +
   geom_point(
-    position = position_jitter(w = 0.025, h = 0),
+    position = position_jitter(w = 0.005, h = 0),
     alpha = 0.25
   ) +
   stat_smooth(method = "lm",
               se = FALSE, 
               geom = "line",
-              size = 1.75) +
-  geom_abline(linetype = "dashed",
+              size = 1) +
+  geom_abline(linetype = "solid",
               size = 1) +
   scale_color_manual(
     values = c("#FF914A", "#019AFF",  "#FF1984" )) +
-  theme_bw())
+  theme_bw() +
+    facet_grid(rows = vars(Model)) +
+    labs(y = "\u03bb estimate",
+         x = "Known \u03bb") +
+    theme(legend.position = "none"))
 
 ggsave(plot = known_est_b_line,
        filename = "figures/known_est_b_line.png")
@@ -76,7 +81,7 @@ saveRDS(est_lambda, file = paste0("data_sim/",
 
 # 2 lambda windows ####
 
-# 2A ####
+# 2A steep ####
 # steep lambda [-1.5, -2.5]
 # for reproducibility
 set.seed(2806)
@@ -101,7 +106,7 @@ saveRDS(steep_lambda, file = paste0("data_sim/",
                                   substitute(steep_lambda),
                                   "_dat.rds"))
 
-# 2b ####
+# 2b medium ####
 # medium lambda [-1, -2]
 # for reproducibility
 set.seed(2806)
@@ -126,7 +131,7 @@ saveRDS(med_lambda, file = paste0("data_sim/",
                                     substitute(med_lambda),
                                     "_dat.rds"))
 
-# 2c ####
+# 2c shallow ####
 # shallow lambda [-0.5, -1.5]
 # for reproducibility
 set.seed(2806)
@@ -155,7 +160,7 @@ saveRDS(shallow_lambda, file = paste0("data_sim/",
 # 1 env_gradient [-1, 1]
 # 3 sets of lambdas [-1.5], [-1.25, -1.75], [-1, -2]
 
-# 3A ####
+# 3A no relationship ####
 # lambda = [-1.5]
 
 set.seed(2806)
@@ -181,7 +186,7 @@ saveRDS(relationship_0,
                       "_dat.rds"))
 
 
-# 3B ####
+# 3B -0.25 relationship ####
 # lambda = [-1.25, -1.75]
 
 set.seed(2806)
@@ -206,7 +211,7 @@ saveRDS(relationship_025,
                       substitute(relationship_025),
                       "_dat.rds"))
 
-# 3C ####
+# 3C -0.5 relationship ####
 # lambda = [-1, -2]
 
 set.seed(2806)
