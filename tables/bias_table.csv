@@ -1,0 +1,12 @@
+"Table 1. Summary of three methods in recapturing the known values of lambda or the regression slopes in this study. Performance compared by uncertainty estimates (range of 95% CI's), and the absolute distance of the model estimates from the known estimates (median and sd of the differnce). Values are summarized across all 9000 or 6000 simulated datasets. See figures for more specific comparisons.",,,,,
+Target,n,Method,Median Range of 95% CI,Median Absolute Bias,SD Absolute Bias
+Lambda,9000,MLE,0.07,0.01,0.02
+Lambda,9000,NAS,0.13,0.05,0.09
+Lambda,9000,ELBn,0.17,0.04,0.07
+Regression Slope,6000,MLE,0.04,0.01,0.01
+Regression Slope,6000,NAS,0.08,0.05,0.04
+Regression Slope,6000,ELBn,0.09,0.03,0.04
+,,,,,
+,,,,,
+,,,,,
+,,,,,
