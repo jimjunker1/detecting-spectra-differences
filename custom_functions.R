@@ -146,13 +146,9 @@ compare_slopes <- function(data, dw_range, rsp_var, ...){
   # AS_coefs<- coef(AS_lm)
   # AS_conf <- confint(AS_lm)
   
-  # equal logarithmic binning method
+  # equal logarithmic binning method, non-normalized
   
-  # breaks_log_6 <- exp(seq(floor(log(min(dw_range))),
-  #                         ceiling(log(max(dw_range))),
-  #                         length.out = 7))
-  # mid_bin_log_6 <- log10(breaks_log_6[floor(length(breaks_log_6)/2)])
-  # ELB6
+  # 6 equal logarthmic bins
    ELB <- bin_and_center(data, var = rsp_var, breaks = breaks_log_6)
   ELB$log_mids_center <- ELB$log_mids - mid_bin_log_6
   # ELB_lm <- lm(log_count~log_mids_center,
@@ -160,6 +156,8 @@ compare_slopes <- function(data, dw_range, rsp_var, ...){
   # # ELB_coef <- coef(ELB_lm)
   # # ELB_conf <- confint(ELB_lm)
   # ELB_out <- est_ci(ELB_lm)
+  
+  # ELB normalized
   ELBn_lm <- lm(log_count_corrected~log_mids_center,
               data = ELB)
   # ELBn_coef <- coef(ELBn_lm)
@@ -175,25 +173,9 @@ compare_slopes <- function(data, dw_range, rsp_var, ...){
                    #ELB_out,
                    ELBn_out,
                    mle_b))
-  slopes$name <- c("NAS", #"AS", 
+  slopes$name <- c("L2n", #"AS", 
                    #"ELB",
                    "ELBn", "MLE")
-  # slopes = data.frame(NAS = NAS_out,
-  #                     # NAS_25 = NAS_conf[2],
-  #                     # NAS_975 = NAS_conf[4],
-  #                     AS = AS_out,
-  #                     # AS_25 = AS_conf[2],
-  #                     # AS_975 = AS_conf[4],
-  #                     ELB6 = ELB_out,
-  #                     # ELB_25 = ELB_conf[2],
-  #                     # ELB_95 = ELB_conf[4],
-  #                     ELBn = ELBn_out,
-  #                     # ELBn_25 = ELBn_conf[2],
-  #                     # ELBn_975 = ELBn_conf[4],
-  #                     mle = mle_b
-  #                     # mle_25 = mle_b$minCI,
-  #                     # mle_975 = mle_b$maxCI
-  #                     )
   slopes
 }
 
@@ -266,10 +248,6 @@ sim_result <- function(n = 1000,
     nest() %>% 
     mutate(method_compare = 
              map(data, 
-                 # added the possibly() function on 6/12/2022
-                 # small sample size (n=100) was having a hard time with MLE estimates for steep (b = -2.5) distributions
-                 # added this so that it "skips" problematic iterations instead of stopping. 
-                 # removed 6/13 - work this out later
                  compare_slopes,
                  rsp_var = "m",
                  dw_range = dw_range)) %>%
@@ -288,7 +266,7 @@ plot_sim <- function(sim_data,
                           levels = 
                             c("MLE",
                               "ELBn", 
-                              "NAS"))) %>%
+                              "L2n"))) %>%
     ggplot(aes(x = env_gradient,
                y = estimate, 
                group = rep,
@@ -373,7 +351,7 @@ if(sim_data$distribution[1] == "PLB"){
                           levels = 
                             c("MLE",
                               "ELBn", 
-                              "NAS"))) %>%
+                              "L2n"))) %>%
     ggplot(
       aes(x = estimate, 
           y = Model,
@@ -417,6 +395,7 @@ if(sim_data$distribution[1] == "PLB"){
                   "_est_b_density.png"))
   
   # distribution of slope estimates?
+  # replace with calc_relationship_estimate() function
   relationship_estimate <- sim_data %>%
     group_by(rep, name, known_relationship) %>%
     nest() %>%
@@ -461,7 +440,7 @@ if(sim_data$distribution[1] == "PLB"){
                           levels = 
                             c("MLE",
                               "ELBn", 
-                              "NAS"))) %>%
+                              "L2n"))) %>%
     ggplot(aes(x = estimate, 
                y = Model,
                fill = Model))+
@@ -500,7 +479,7 @@ lambda_estimate_density_plot <- function(sim_data){
                           levels = 
                             c("MLE",
                               "ELBn", 
-                              "NAS"))) %>%
+                              "L2n"))) %>%
     ggplot(
       aes(x = estimate, 
           y = Model,
@@ -530,13 +509,15 @@ calc_relationship_estimate <- function(sim_data){
   select(-data, -lm_mod, -statistic)}
 
 
+
+
 relationship_density_plot <- function(relationship_estimate){
   relationship_estimate %>%
   mutate(Model = factor(name,
                         levels = 
                           c("MLE",
                             "ELBn", 
-                            "NAS"))) %>%
+                            "L2n"))) %>%
   ggplot(aes(x = estimate, 
              y = Model,
              fill = Model))+
@@ -560,7 +541,7 @@ main_plot <- function(sim_data){
                         levels = 
                           c("MLE",
                             "ELBn", 
-                            "NAS"))) %>%
+                            "L2n"))) %>%
   ggplot(aes(x = env_gradient,
              y = estimate, 
              group = rep,

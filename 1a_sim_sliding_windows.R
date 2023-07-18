@@ -31,7 +31,10 @@ rep = 1000
 m_lower = 0.0026
 m_upper = 1.2e3
 
-est_lambda <- sim_result(n = 1000,
+# number of body sizes r=to sample, n
+n = 999
+
+est_lambda <- sim_result(n = n,
                       b = lambda,
                       env_gradient = env_gradient,
                       rep = rep, 
@@ -92,7 +95,7 @@ env_gradient = seq(from = -1, to = 1, length.out = 5)
 lambda
 env_gradient
 
-steep_lambda <- sim_result(n = 1000,
+steep_lambda <- sim_result(n = n,
                          b = lambda,
                          env_gradient = env_gradient,
                          rep = rep, 
@@ -117,7 +120,7 @@ env_gradient = seq(from = -1, to = 1, length.out = 5)
 lambda
 env_gradient
 
-med_lambda <- sim_result(n = 1000,
+med_lambda <- sim_result(n = n,
                            b = lambda,
                            env_gradient = env_gradient,
                            rep = rep, 
@@ -141,7 +144,7 @@ lambda = seq(from = -0.5, to = -1.5, length.out = 5)
 lambda
 env_gradient
 
-shallow_lambda <- sim_result(n = 1000,
+shallow_lambda <- sim_result(n = n,
                            b = lambda,
                            env_gradient = env_gradient,
                            rep = rep, 
@@ -170,7 +173,7 @@ lambda = seq(from = -1.5, to = -1.5, length.out = 5)
 lambda
 env_gradient
 
-relationship_0 <- sim_result(n = 1000,
+relationship_0 <- sim_result(n = n,
                              b = lambda,
                              env_gradient = env_gradient,
                              rep = rep, 
@@ -196,7 +199,7 @@ lambda = seq(from = -1.25, to = -1.75, length.out = 5)
 lambda
 env_gradient
 
-relationship_025 <- sim_result(n = 1000,
+relationship_025 <- sim_result(n = n,
                              b = lambda,
                              env_gradient = env_gradient,
                              rep = rep, 
@@ -221,7 +224,7 @@ lambda = seq(from = -1, to = -2, length.out = 5)
 lambda
 env_gradient
 
-relationship_05 <- sim_result(n = 1000,
+relationship_05 <- sim_result(n = n,
                                b = lambda,
                                env_gradient = env_gradient,
                                rep = rep, 

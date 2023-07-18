@@ -35,13 +35,19 @@ env_gradient = seq(from = -1, to = 1, length.out = 5)
 lambda
 env_gradient
 
+# number of replications to perform
 rep = 1000
+
 # body sizes in NEON data set varies from 0.0026 to 1.2e4
 # setting sample range based on that minimum, but reducing max by order of magnitude
 m_lower = 0.0026
 m_upper = 1.2e3
 
-PLB_sim <- sim_result(n = 1000,
+# number of body sizes to sample, n
+# 999 so as not to confuse with 1000 reps
+n = 999
+
+PLB_sim <- sim_result(n = n,
                       b = lambda,
                       env_gradient = env_gradient,
                       rep = rep, 
@@ -65,7 +71,7 @@ plot_sim(PLB_sim)
 # for reproducibility
 set.seed(2806)
 
-PLB_large_x <- sim_result(n = 1000,
+PLB_large_x <- sim_result(n = n,
                           b = lambda,
                           env_gradient = seq(from = -100,
                                              to = 100,
@@ -86,7 +92,7 @@ rm(PLB_large_x)
 # for reproducibility
 set.seed(2806)
 
-PLB_small_m <- sim_result(n = 1000,
+PLB_small_m <- sim_result(n = n,
                           b = lambda,
                           env_gradient = env_gradient,
                           rep = rep, 
@@ -146,7 +152,11 @@ rm(PLB_10_sites)
 
 # sample size of body sizes -----------------------------------------------
 # varying the sample size of simulated data
-# 10,000, 5,000, 500, 100
+# 10,000, 5,000, 500, 200
+  # originally tried n = 100, but some of the 
+  # iterations could not fit size spectra methods
+  # Maybe an indication that n=200 is an 
+  # approximate minimial sample size?
 
 #rep = 1000
 n = 10000 
