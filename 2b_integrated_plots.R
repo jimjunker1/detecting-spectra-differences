@@ -36,12 +36,17 @@ angles <- bind_rows(steep = angle_A,
 
 saveRDS(angles, file = "data_sim/angles.rds")
 
-lambda_window <- angles %>%
-  mutate(Model = factor(name,
+##### Need to chnage order of legend to be L2n, ELBn, MLE ####
+
+
+(lambda_window <- angles %>%
+  mutate(
+    Model = case_when(name == "NAS" ~ "L2n", .default = name),
+    Model = factor(Model,
                         levels = 
                           c("MLE",
                             "ELBn", 
-                            "NAS")),
+                            "L2n")),
          sim = factor(id, 
                       levels = c("steep", 
                       "medium", 
@@ -61,7 +66,7 @@ lambda_window <- angles %>%
   labs(x = "Relationship estimate") +
   facet_wrap(sim~., 
              ncol = 1) +
-  NULL
+  NULL)
 
 ggsave(plot = lambda_window,
        filename = "figures/lambda_angle_plot.png",
@@ -76,12 +81,20 @@ rel_data <- bind_rows(beta_0 = rel_0,
 
 saveRDS(rel_data, file = "data_sim/rel_data.rds")
 
+
+###### Flip facet-wrap rows, top = 0, bottom = -0.5
 rel_data %>%
-  mutate(Model = factor(name,
-                        levels = 
-                          c("MLE",
-                            "ELBn", 
-                            "NAS"))) %>%
+  mutate(
+    Model = case_when(name == "NAS" ~ "L2n", .default = name),
+    Model = factor(Model,
+                   levels = 
+                     c("MLE",
+                       "ELBn", 
+                       "L2n")),
+    # set levels of known relaitonship for facet_wrap() plotting order below
+    known_relationship = factor(known_relationship,
+                                levels = c("0", "-0.25", "-0.5"))) %>%
+  filter(rep <= 100) %>%
   ggplot(aes(x = env_gradient,
              y = estimate, 
              group = rep,
@@ -90,24 +103,14 @@ rel_data %>%
     values = c("#019AFF", "#FF914A", "#FF1984" )) +
   stat_smooth(geom = "line",
               method = "lm",
-              alpha = 0.15,
+              alpha = 0.05,
               se = FALSE, 
               color = "black") +
-  geom_point(alpha = 0.5) +
+  geom_point(alpha = 0.1) +
   facet_wrap(known_relationship~Model)+
-  # labs(title = sim_data$distribution,
-  #      subtitle = 
-  #        paste0("m_range =(",
-  #               sim_data$m_lower,
-  #               ",",
-  #               sim_data$m_upper,
-  #               ") \nb = (",
-  #               min(sim_data$known_b),
-  #               ",",
-  #               max(sim_data$known_b),
-  #               ")")) +
   theme_bw() +
   theme(legend.position="none")+
+  labs(x = "Hypothetical environemntal gradient")
   NULL
 
 ggsave(filename = "figures/vary_beta_plot.png",
@@ -123,11 +126,14 @@ rel_data_summary = rel_data %>% calc_relationship_estimate(.)
 saveRDS(rel_data_summary, file = "data_sim/rel_data_summary.rds")
 
 rel_data_summary %>%
-  mutate(Model = factor(name,
-                        levels = 
-                          c("MLE",
-                            "ELBn", 
-                            "NAS"))) %>%
+  mutate(
+    
+    Model = case_when(name == "NAS" ~ "L2n", .default = name),
+    Model = factor(Model,
+                   levels = 
+                     c("MLE",
+                       "ELBn", 
+                       "L2n"))) %>%
   ggplot(aes(x = estimate, 
              y = Model,
              fill = Model))+
@@ -178,11 +184,13 @@ rel_data_summary %>%
 # export this figure using the plot window
 
 est_lambda %>%
-  mutate(Model = factor(name,
-                        levels = 
-                          c("MLE",
-                            "ELBn", 
-                            "NAS"))) %>%
+  mutate(
+    Model = case_when(name == "NAS" ~ "L2n", .default = name),
+    Model = factor(Model,
+                   levels = 
+                     c("MLE",
+                       "ELBn", 
+                       "L2n"))) %>%
   ggplot(
     aes(x = estimate, 
         y = Model,
