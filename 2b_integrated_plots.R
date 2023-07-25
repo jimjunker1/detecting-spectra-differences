@@ -56,9 +56,12 @@ saveRDS(angles, file = "data_sim/angles.rds")
              fill = Model))+
   stat_halfeye(.width = c(0.66, 0.95)) +
   scale_fill_manual(
-    values = c("#019AFF",
+    values = c("#FF1984",
                "#FF914A",
-               "#FF1984" )) +
+               "#019AFF"),
+    breaks = c("L2n",
+               "ELBn", 
+               "MLE")) +
   theme_bw() +
   geom_vline(
     aes(xintercept = known_relationship),
@@ -139,9 +142,12 @@ rel_data_summary %>%
              fill = Model))+
   stat_halfeye(.width = c(0.66, 0.95)) +
   scale_fill_manual(
-    values = c("#019AFF",
+    values = c("#FF1984",
                "#FF914A",
-               "#FF1984" )) +
+               "#019AFF"),
+    breaks = c("L2n",
+               "ELBn", 
+               "MLE")) +
   theme_bw() +
   geom_vline(
     aes(xintercept = known_relationship),
@@ -169,9 +175,12 @@ rel_data_summary %>%
              fill = Model))+
   stat_halfeye(.width = c(0.66, 0.95)) +
   scale_fill_manual(
-    values = c("#019AFF",
+    values = c("#FF1984",
                "#FF914A",
-               "#FF1984" )) +
+               "#019AFF"),
+    breaks = c("L2n",
+               "ELBn", 
+               "MLE")) +
   theme_bw() +
   geom_vline(
     aes(xintercept = known_relationship),
@@ -197,7 +206,12 @@ est_lambda %>%
         fill = Model)) +
   stat_halfeye(.width = c(0.66, 0.95)) +
   scale_fill_manual(
-    values = c("#019AFF", "#FF914A", "#FF1984" )) +
+    values = c("#FF1984",
+               "#FF914A",
+               "#019AFF"),
+    breaks = c("L2n",
+               "ELBn", 
+               "MLE")) +
   theme_bw() +
   geom_vline(aes(xintercept = known_b),
              linetype = "dashed") +
