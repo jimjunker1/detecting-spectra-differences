@@ -4,12 +4,15 @@ library(tidybayes)
 source("custom_functions.R")
 
 # load data
-est_lambda <- readRDS("data_sim/est_lambda_dat.rds") %>% mutate(target = known_b,
-                                                                target_name = "Lambda") #figure 1 sims
-angles = readRDS("data_sim/angles.rds") %>% mutate(target = known_relationship,
-                                                   minCI = estimate - 1.96*std.error,
-                                                   maxCI = estimate + 1.96*std.error,
-                                                   target_name = "Regression Slope") #figure 3 sims
+est_lambda <- readRDS("data_sim/est_lambda_dat.rds") %>% 
+  mutate(target = known_b,
+         target_name = "Lambda") #figure 1 sims
+
+angles = readRDS("data_sim/angles.rds") %>% 
+  mutate(target = known_relationship,
+         minCI = estimate - 1.96*std.error,
+         maxCI = estimate + 1.96*std.error,
+         target_name = "Regression Slope") #figure 3 sims
 
 # rel_data = readRDS("data_sim/rel_data.rds") # figure 4 sims
 
