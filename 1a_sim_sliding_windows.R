@@ -31,7 +31,7 @@ rep = 1000
 m_lower = 0.0026
 m_upper = 1.2e3
 
-# number of body sizes r=to sample, n
+# number of body sizes to sample, n
 n = 999
 
 est_lambda <- sim_result(n = n,
