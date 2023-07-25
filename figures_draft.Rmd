@@ -1,0 +1,64 @@
+---
+title: "Figures for 'Detecting' Manuscript"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: 
+  - Justin Pomeranz:
+      email: jfpomeranz@gmail.com
+      institute: cmu
+      correspondence: true
+  - name: James R. Junker
+    institute: [glrc, lumcon]
+  - name: Vojsava Gjoni
+    institute: usd
+  - name: Jeff S. Wesner
+    institute: usd
+institute:
+  - cmu: Colorado Mesa University, Grand Junction, CO, USA
+  - glrc: Great Lakes Research Center, Michigan Technological University, Houghton, MI USA
+  - lumcon: Louisiana Universities Marine Consortium, Chauvin, LA USA
+  - usd: Dept. of Biology, University of South Dakota, Vermillion, SD, USA
+output:
+   word_document:
+      reference_docx: working_docx_template.docx
+      toc: no
+      pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+   pdf_document:
+     toc: yes
+     keep_tex: true
+     pandoc_args:
+     - '--lua-filter=scholarly-metadata.lua'
+     - '--lua-filter=author-info-blocks.lua'
+header-includes:
+  - \usepackage{lineno}
+  - \usepackage{amsmath}
+  - \usepackage{indentfirst}
+  - \linenumbers
+  - \newcommand{\beginsupplement}{ \setcounter{table}{0} \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
+indent: true
+linestretch: 1
+bibliography: detecting-size-spectra-difference.bib
+link-citations: no
+link-color: grey
+csl: ecology.csl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE)
+library(tidyverse)
+```
+
+
+
+![Figure 1. Distribution of Lambda estimates by method (color) from random samples of body sizes from bounded power law distributions with varying exponents (-2.5 to -0.5). The figure is facetted by the known lambda parameter (facet title) and is also shown as the dashed line in each facet. Note that the x-axis varies in each facet.](figures/est_lambda_est_b_density.png)
+
+![Figure 2. Distribution of relationship estimates ($beta_{env}$) in three different "windows" of lambda values. The dashed vertical line is the known relationship value of -0.5.](figures/lambda_angle_plot.png)
+
+![Figure 3. Individual regressions by method (columns) for three different known relationship values (rows from bottom to top): 0, 0.25, and 0.5. There were a total of 1000 replicates simulated, but only 100 replicates are plotted here with `alpha = 0.05` to illustrate the variability in the regression lines.](figures/vary_beta_plot.png)
+
+![Figure 4. Distribution of relationship estimates (beta_1) when estimating from different known relationships](figures/vary_beta_density_plot.png)
+
+
+![Figure 5. of empirical data estimates. All of the methods estimate the same sign of the relationship, but the estimates from the binning methods are generally greater than the MLE estimates.](figures/empirical_combined.png)
