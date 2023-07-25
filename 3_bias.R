@@ -88,7 +88,7 @@ bias_table = all_dat %>%
   add_count %>% 
   group_by(target_name, name, n) %>%
   summarize(median_ci_range = median(conf_width),
-            mean_abs_bias = median(abs_bias),
+            median_abs_bias = median(abs_bias),
             sd_abs_bias = sd(abs_bias)) %>% 
   arrange(target_name, median_ci_range)
 
