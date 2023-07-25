@@ -1,0 +1,135 @@
+---
+title: "Supplementary Information for 'Detecting' Manuscript"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+author: 
+  - Justin Pomeranz:
+      email: jfpomeranz@gmail.com
+      institute: cmu
+      correspondence: true
+  - name: James R. Junker
+    institute: [glrc, lumcon]
+  - name: Vojsava Gjoni
+    institute: usd
+  - name: Jeff S. Wesner
+    institute: usd
+institute:
+  - cmu: Colorado Mesa University, Grand Junction, CO, USA
+  - glrc: Great Lakes Research Center, Michigan Technological University, Houghton, MI USA
+  - lumcon: Louisiana Universities Marine Consortium, Chauvin, LA USA
+  - usd: Dept. of Biology, University of South Dakota, Vermillion, SD, USA
+output:
+   word_document:
+      reference_docx: working_docx_template.docx
+      toc: no
+      pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+   pdf_document:
+     toc: yes
+     keep_tex: true
+     pandoc_args:
+     - '--lua-filter=scholarly-metadata.lua'
+     - '--lua-filter=author-info-blocks.lua'
+header-includes:
+  - \usepackage{lineno}
+  - \usepackage{amsmath}
+  - \usepackage{indentfirst}
+  - \linenumbers
+  - \newcommand{\beginsupplement}{ \setcounter{table}{0} \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
+indent: true
+linestretch: 1
+bibliography: detecting-size-spectra-difference.bib
+link-citations: no
+link-color: grey
+csl: ecology.csl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE)
+library(tidyverse)
+```
+
+# Supplementary material {.unnumbered}
+
+```{=tex}
+\beginsupplement
+```
+# $\lambda$ and relationship estimates
+
+In the main analysis, we simulate body size data from bounded power law distributions while varying the $\lambda$ exponent which describes the distribution. For the results presented in the main text, we held the number of sites at 5, scaled the environmental gradient from -1 to 1, and set the minimum and maximum body sizes to $0.0026$ and $1.2 *10^3$ respectively. Here, we plot the results of varying the number of sites (3, 10), increasing the scale of the environmental gradient (-100 to 100) and decreasing the range of body sizes (min = 1, max = 100). Generally, the results reported in the main manuscript are robust to changing these parameters: the MLE estimate is nearly always closer to the known parameters, and the variation in these estimates is usually smaller than the binning methods.
+
+## Varying number of sites
+
+### 10 sites
+
+![Individual regressions for ten sites across a hypothetical gradient with a known relationship of 0.5. All other parameters are the same as in the main analysis](figures/PLB_10_sites_main.png)
+
+\newpage
+
+![Distribution of estimated $\lambda$ coefficient for ten sites across a hypothetical gradient with known values. All other parameters are the same as in the main analysis](figures/PLB_10_sites_est_b_density.png)
+
+\newpage
+
+![Distribution of estimated relationship ($\beta_1$) coefficient's for ten sites across a hypothetical gradient with known value of 0.5. All other parameters are the same as in the main analysis](figures/PLB_10_sites_relationship_density.png)
+
+\newpage
+
+### Three sites
+
+![Individual regressions for three sites across a hypothetical gradient with a known relationship of 0.5. All other parameters are the same as in the main analysis.](figures/PLB_3_sites_main.png)
+
+\newpage
+
+![Distribution of estimated $\lambda$ coefficient for three sites across a hypothetical gradient with known values. All other parameters are the same as in the main analysis.](figures/PLB_3_sites_est_b_density.png)
+
+\newpage
+
+![Distribution of estimated relationship ($\beta_1$) coefficient's for three sites across a hypothetical gradient with known value of 0.5. All other parameters are the same as in the main analysis](figures/PLB_3_sites_relationship_density.png)
+
+\newpage
+
+## Large environmental gradient
+
+![Individual regressions for five sites across a hypothetical gradient with a known relationship of 0.5. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_main.png)
+
+\newpage
+
+![Distribution of estimated $\lambda$ coefficient for five sites across a hypothetical gradient with known values. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_est_b_density.png)
+
+\newpage
+
+![Distribution of estimated relationship ($\beta_1$) coefficient's for five sites across a hypothetical gradient with known value of 0.5. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_relationship_density.png)
+
+\newpage
+
+## Range of body sizes, $M$
+
+![Individual regressions for five sites across a hypothetical gradient with a known relationship of 0.5. Range of body sizes is reduced and is from 1, to 100.](figures/PLB_small_m_main.png)
+
+\newpage
+
+![Distribution of estimated \$\\lambda\$ coefficient for five sites across a hypothetical gradient with known values(dashed line). Range of body sizes is smaller than main anaysis and ranges from 1, to 100.](figures/PLB_small_m_est_b_density.png)
+
+![Distribution of estimated relationship ($\beta_1$) coefficient's for five sites across a hypothetical gradient with known value of 0.5. Range of body sizes is reduced and is from 1, to 100.](figures/PLB_small_m_relationship_density.png)
+
+\newpage
+
+## Sample size, $n$
+
+The number of observations in our simulations may bias the results. Therefore, we repeated the simulations described above, but varied the sample size $n$. We tested values of $n = 200, 500, 1000, 5000, 10 000$. Results of this analysis are presented in the Supplemental Information. 
+
+![Individual regression estimates across the hypothetical gradient based on sample size (rows) and methodology used (columns). (match this figure to "new" style if we like that better)](figures/n_vary_main.png)
+
+![Distribution of size spectra parameter estimates. Vertical line is the known parameter (dashed line) wich describes the bounded power law distribution from which the body size estimates were sampled. As n increases (top to bottom) and $\lambda$ increases (left to right), the accuracy of the estimate improves across all methods.](figures/n_vary_est_b.png)
+
+\newpage
+
+
+![Distribtuion of the relationship coefficients with varying sample size](figures/n_vary_relationship_density.png)
+
+# Comparison with other published estimates
+
+SI Table. This table shows published estimates of the variation in size spectra slopes (or exponents) in empirical studies. It is unclear how to directly compare estimates of the slope with different methods. However, the published estimates here range from ~0.1 to 0.2 across the gradients studied. For comparison, the 2.5-95% quantiles around the relationship estimate for the MLE method were ~0.1, whereas for the ELBn and NAS method they were ~0.25 and ~0.2, respectively. b_diff is the change in estimate (b-low - b-min). System refers to stream communities or mesocosm experiments. Method: MLE = maximum likelihod estimate, ELB = equal logarthmic binning, the number before indicates the number of bins used. The normalization process shifts the estimates by an absolute value of 1.0. Hence, direct comparison the relative change in normalized and non-normalized studies should not introduce any bias. The O'Gorman et al. 2017 study used average species size and abundance (Local Size Density Relationship, *sensu* White et al. 2007) as opposed to individual size distribution. These methods are related, but it is unclear how to directly compare estimates from each method. 
+
+Supplementary table comparing with other published results will be submitted as a separate file for formatting. 
