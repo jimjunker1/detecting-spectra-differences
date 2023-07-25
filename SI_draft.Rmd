@@ -57,79 +57,60 @@ library(tidyverse)
 ```
 # $\lambda$ and relationship estimates
 
-In the main analysis, we simulate body size data from bounded power law distributions while varying the $\lambda$ exponent which describes the distribution. For the results presented in the main text, we held the number of sites at 5, scaled the environmental gradient from -1 to 1, and set the minimum and maximum body sizes to $0.0026$ and $1.2 *10^3$ respectively. Here, we plot the results of varying the number of sites (3, 10), increasing the scale of the environmental gradient (-100 to 100) and decreasing the range of body sizes (min = 1, max = 100). Generally, the results reported in the main manuscript are robust to changing these parameters: the MLE estimate is nearly always closer to the known parameters, and the variation in these estimates is usually smaller than the binning methods.
-
-## Varying number of sites
-
-### 10 sites
-
-![Individual regressions for ten sites across a hypothetical gradient with a known relationship of 0.5. All other parameters are the same as in the main analysis](figures/PLB_10_sites_main.png)
-
-\newpage
-
-![Distribution of estimated $\lambda$ coefficient for ten sites across a hypothetical gradient with known values. All other parameters are the same as in the main analysis](figures/PLB_10_sites_est_b_density.png)
-
-\newpage
-
-![Distribution of estimated relationship ($\beta_1$) coefficient's for ten sites across a hypothetical gradient with known value of 0.5. All other parameters are the same as in the main analysis](figures/PLB_10_sites_relationship_density.png)
-
-\newpage
-
-### Three sites
-
-![Individual regressions for three sites across a hypothetical gradient with a known relationship of 0.5. All other parameters are the same as in the main analysis.](figures/PLB_3_sites_main.png)
-
-\newpage
-
-![Distribution of estimated $\lambda$ coefficient for three sites across a hypothetical gradient with known values. All other parameters are the same as in the main analysis.](figures/PLB_3_sites_est_b_density.png)
-
-\newpage
-
-![Distribution of estimated relationship ($\beta_1$) coefficient's for three sites across a hypothetical gradient with known value of 0.5. All other parameters are the same as in the main analysis](figures/PLB_3_sites_relationship_density.png)
-
-\newpage
-
-## Large environmental gradient
-
-![Individual regressions for five sites across a hypothetical gradient with a known relationship of 0.5. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_main.png)
-
-\newpage
-
-![Distribution of estimated $\lambda$ coefficient for five sites across a hypothetical gradient with known values. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_est_b_density.png)
-
-\newpage
-
-![Distribution of estimated relationship ($\beta_1$) coefficient's for five sites across a hypothetical gradient with known value of 0.5. Range of environmental values (*x*-axis) increased to be -1000, to 1000.](figures/PLB_large_x_relationship_density.png)
-
-\newpage
-
-## Range of body sizes, $M$
-
-![Individual regressions for five sites across a hypothetical gradient with a known relationship of 0.5. Range of body sizes is reduced and is from 1, to 100.](figures/PLB_small_m_main.png)
-
-\newpage
-
-![Distribution of estimated \$\\lambda\$ coefficient for five sites across a hypothetical gradient with known values(dashed line). Range of body sizes is smaller than main anaysis and ranges from 1, to 100.](figures/PLB_small_m_est_b_density.png)
-
-![Distribution of estimated relationship ($\beta_1$) coefficient's for five sites across a hypothetical gradient with known value of 0.5. Range of body sizes is reduced and is from 1, to 100.](figures/PLB_small_m_relationship_density.png)
-
-\newpage
+In the main analysis, we sampled body size values from bounded power law distributions while varying the $\lambda$ exponent which describes the distribution. For the results presented in the main text, we held the number of body size values constant at n=999, held the number of sites at 5, scaled the environmental gradient from -1 to 1, and set the minimum and maximum body sizes to $0.0026$ and $1.2 *10^3$ respectively. Here, we plot the mean and standard deviation of the absolute value of deviations of the estimates from the known $\lambda$ values for the main results, and when varying the number of body sizes sampled (n = 200, 500, 5000, 10000), varying the number of sites (3, 10), increasing the scale of the environmental gradient (-100 to 100) and decreasing the range of body sizes (min = 1, max = 100). Generally, the results reported in the main manuscript are robust to changing these parameters: the MLE estimate is nearly always closer to the known parameters, and the variation in these estimates is usually smaller than the binning methods.
 
 ## Sample size, $n$
 
-The number of observations in our simulations may bias the results. Therefore, we repeated the simulations described above, but varied the sample size $n$. We tested values of $n = 200, 500, 1000, 5000, 10 000$. Results of this analysis are presented in the Supplemental Information. 
+The number of observations in our simulations may bias the results. Therefore, we repeated the simulations described in the main, but varied the number of body size values sampled. We tested values of $n = 200, 500, 999, 5000, 10 000$. All other parameters of our simulations were kept the same as the simulations presented in the main text. 
 
-![Individual regression estimates across the hypothetical gradient based on sample size (rows) and methodology used (columns). (match this figure to "new" style if we like that better)](figures/n_vary_main.png)
+All methods improved with increasing sample size (Fig. S1). However, the accuracy of the MLE method was far superior. For example, the average absolute deviation for the MLE method with only 200 body sizes values was similar to the ELBn method with 5,000 body size values and smaller than the L2n method with 10,000 body size values (Table S1). 
 
-![Distribution of size spectra parameter estimates. Vertical line is the known parameter (dashed line) wich describes the bounded power law distribution from which the body size estimates were sampled. As n increases (top to bottom) and $\lambda$ increases (left to right), the accuracy of the estimate improves across all methods.](figures/n_vary_est_b.png)
+![Figure S1. Absolute deviation in estimate from known value of $\lambda$. Points are jittered horizontally for visualization, and are deviations for each simulated replicate (n = 1000) across varying sample sizes of body size values. Lines are the average absolute deviation from the estimate. Colors indicate which method was used to estimate $\lambda$.](figures/abs_dev_by_body_n.png)
+```{r, echo=FALSE, results='asis', message=FALSE}
+library(knitr)
+table1 <- read_csv("tables/abs_dev_n_vary.csv") %>%
+  mutate(diff_abs_mean = round(diff_abs_mean, 3),
+         diff_abs_sd = round(diff_abs_sd, 3)) %>%
+  rename(method = name,
+         "mean abs diff"=diff_abs_mean,
+         "SD abs diff"=diff_abs_sd)
+kable(table1,
+         caption = "Table S1. Deviation of estimates across methods for different sample sizes of body values (body_n). The mean and standard deviation for each row (mean abs diff and sd abs diff, respectively) in the table are calculated across all replicates for each value of lambda (1000 reps * 5 lambda values = 5000 values.",
+      padding = 10)
+```
 
-\newpage
+
+## Range of values for hypothetical environmental gradient (x) and body sizes (m)
+
+We also wanted to ensure that our results were not sensitive to the values for the hypothetical gradient or the range of body sizes sampled. For this, we varied the values of the hypothetical gradient from -100 to 100, instead of from -1 to 1 as in the main text while keeping all other parameters of the simulation as described in the main text. We found no differences in the deviation of estimates when the hypothetical gradient was changed across any of the methods (Table S2). 
+
+When the range of body sizes sampled was reduced to be from 1 to 100, the ELBn method had slightly greater absolute deviations (0.02) from the known values of $\lambda$, although the variation in the estimates was reduced by ~0.016 (Table S2). In contrast, the L2n method had generally lower absolute deviations (0.05) and lower variability (0.04) with smaller body size ranges. Finally, the MLE method had slightly higher absolute deviations (0.004) and variability (0.001) when the range of body sizes was reduced, but was more similar to estimated values presented in the main results (Table S2). 
+
+```{r, echo=FALSE, results='asis', message=FALSE}
+library(knitr)
+table2 <- read_csv("tables/si_table2.csv") %>%
+  mutate(diff_abs_mean = round(diff_abs_mean, 3),
+         diff_abs_sd = round(diff_abs_sd, 3)) %>%
+  rename(method = name,
+         "mean abs diff"=diff_abs_mean,
+         "SD abs diff"=diff_abs_sd)
+kable(table2,
+         caption = "Table S2. Deviation of estimates across methods when the values of the hypothetical gradient and the range of body sizes are changed.")
+```
 
 
-![Distribtuion of the relationship coefficients with varying sample size](figures/n_vary_relationship_density.png)
+## Varying number of sites
 
-# Comparison with other published estimates
+The results presented in the main text used five sites equally spaced across a hypothetical environmental gradient. We also ran the simulations using 3 and 10 sites, while keeping all other parameters as described in the main text. Generally, the average absolute deviation in estimates increased with the number of sites, whereas the variation in the deviations decreased, although the magnitude of these changes was slight (Table S3). The change in both of these metrics was the smallest for the MLE method (both = 0.001) and was approximately 0.007 to 0.012 for the absolute deviations and variation in the binning methods. 
 
-SI Table. This table shows published estimates of the variation in size spectra slopes (or exponents) in empirical studies. It is unclear how to directly compare estimates of the slope with different methods. However, the published estimates here range from ~0.1 to 0.2 across the gradients studied. For comparison, the 2.5-95% quantiles around the relationship estimate for the MLE method were ~0.1, whereas for the ELBn and NAS method they were ~0.25 and ~0.2, respectively. b_diff is the change in estimate (b-low - b-min). System refers to stream communities or mesocosm experiments. Method: MLE = maximum likelihod estimate, ELB = equal logarthmic binning, the number before indicates the number of bins used. The normalization process shifts the estimates by an absolute value of 1.0. Hence, direct comparison the relative change in normalized and non-normalized studies should not introduce any bias. The O'Gorman et al. 2017 study used average species size and abundance (Local Size Density Relationship, *sensu* White et al. 2007) as opposed to individual size distribution. These methods are related, but it is unclear how to directly compare estimates from each method. 
-
-Supplementary table comparing with other published results will be submitted as a separate file for formatting. 
+```{r, echo=FALSE, results='asis', message=FALSE}
+library(knitr)
+table3 <- read_csv("tables/si_table3.csv") %>%
+  mutate(diff_abs_mean = round(diff_abs_mean, 3),
+         diff_abs_sd = round(diff_abs_sd, 3)) %>%
+  rename(method = name,
+         "mean abs diff"=diff_abs_mean,
+         "SD abs diff"=diff_abs_sd)
+kable(table3,
+         caption = "Table S3. Deviation of estimates across methods when the number of sites was changed. The results presented in the main text use 5 sites.")
+```
