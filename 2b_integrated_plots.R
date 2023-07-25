@@ -87,6 +87,7 @@ saveRDS(rel_data, file = "data_sim/rel_data.rds")
 
 ###### Flip facet-wrap rows, top = 0, bottom = -0.5
 rel_data %>%
+  filter(rep<=100) %>%
   mutate(
     Model = case_when(name == "NAS" ~ "L2n", .default = name),
     Model = factor(Model,
@@ -112,8 +113,8 @@ rel_data %>%
   geom_point(alpha = 0.1) +
   facet_wrap(known_relationship~Model)+
   theme_bw() +
-  theme(legend.position="none")+
-  labs(x = "Hypothetical environemntal gradient")
+  theme(legend.position="none") +
+  labs(x = "Hypothetical environemntal gradient") +
   NULL
 
 ggsave(filename = "figures/vary_beta_plot.png",
@@ -130,7 +131,6 @@ saveRDS(rel_data_summary, file = "data_sim/rel_data_summary.rds")
 
 rel_data_summary %>%
   mutate(
-    
     Model = case_when(name == "NAS" ~ "L2n", .default = name),
     Model = factor(Model,
                    levels = 
