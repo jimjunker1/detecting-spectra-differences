@@ -37,6 +37,7 @@ The first draft of this paper was written using RMarkdown. The `Manuscript.Rmd` 
 * After the first round of reviews, we switched to making changes and edits in Microsoft Word using the "track changes" feature
 * The `Manuscript` files here do not reflect changes made to future versions of the submitted manuscript.
 * Upon article acceptance, a link to the final version will be included here.
+* We have made separate `.rmd` files for the figures and for the supplemental information. 
   
 ## Custom Functions 
 
