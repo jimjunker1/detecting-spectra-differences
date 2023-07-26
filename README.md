@@ -23,9 +23,9 @@ It then samples body size observations from $\lambda$ values varying by $\beta_{
 
 `3_bias.R`: This script estimates the bias in site-specific $\lambda$ values and $\beta_{env}$ estimates across the three methods. 
 
-`4_a_AMD_estimate`: This script loads the [previously published acid mine drainage data](https://onlinelibrary.wiley.com/doi/abs/10.1111/fwb.13196) and estimates the relationship of $\lambda$ using the three methods. 
+`4_a_AMD_estimate`: This script loads the [previously published acid mine drainage data](https://onlinelibrary.wiley.com/doi/abs/10.1111/fwb.13196) and estimates the relationship of $\lambda$ using the three methods.  The data used in the present analysis can be found in the `site_dw_pca.csv` file. 
 
-`4_a_NEON_estimate`: This script loads the National Ecological Observatory Network data analyzed in [Pomeranz et al. 2022](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.15862) and estimates the relaiionship of $\lambda$ using the three methods. 
+`4_a_NEON_estimate`: This script loads the National Ecological Observatory Network data analyzed in [Pomeranz et al. 2022](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.15862) and estimates the relaiionship of $\lambda$ using the three methods. The data used in the present analysis can be found in the `site_dw_pca.csv` file. 
 
 `4c_empirical_plot.R`: This script takes the estimates from scripts 4a and 4b and makes a single, multi-panel plot for the main text of the manuscript. 
 
