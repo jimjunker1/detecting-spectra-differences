@@ -61,7 +61,7 @@ In the main analysis, we sampled body size values from bounded power law distrib
 
 ## Sample size, $n$
 
-The number of observations in our simulations may bias the results. Therefore, we repeated the simulations described in the main, but varied the number of body size values sampled. We tested values of $n = 200, 500, 999, 5000, 10 000$. All other parameters of our simulations were kept the same as the simulations presented in the main text. 
+The number of observations in our simulations may bias the results. Therefore, we repeated the simulations described in the main, but varied the number of body size values sampled. We tested values of $n = (200,~500,~999,~5000,~10~000)$. All other parameters of our simulations were kept the same as the simulations presented in the main text. 
 
 All methods improved with increasing sample size (Fig. S1). However, the accuracy of the MLE method was far superior. For example, the average absolute deviation for the MLE method with only 200 body sizes values was similar to the ELBn method with 5,000 body size values and smaller than the L2n method with 10,000 body size values (Table S1). 
 
@@ -72,10 +72,11 @@ table1 <- read_csv("tables/abs_dev_n_vary.csv") %>%
   mutate(diff_abs_mean = round(diff_abs_mean, 3),
          diff_abs_sd = round(diff_abs_sd, 3)) %>%
   rename(method = name,
+         "Body sample size" = body_n,
          "mean abs diff"=diff_abs_mean,
          "SD abs diff"=diff_abs_sd)
 kable(table1,
-         caption = "Table S1. Deviation of estimates across methods for different sample sizes of body values (body_n). The mean and standard deviation for each row (mean abs diff and sd abs diff, respectively) in the table are calculated across all replicates for each value of lambda (1000 reps * 5 lambda values = 5000 values.",
+         caption = "Table S1. Deviation of estimates across methods for different sample sizes of body size values. The mean and standard deviation for each row (mean abs diff and sd abs diff, respectively) in the table are calculated across all replicates for each value of lambda (1000 reps * 5 lambda values = 5000 values.",
       padding = 10)
 ```
 
@@ -95,7 +96,7 @@ table2 <- read_csv("tables/si_table2.csv") %>%
          "mean abs diff"=diff_abs_mean,
          "SD abs diff"=diff_abs_sd)
 kable(table2,
-         caption = "Table S2. Deviation of estimates across methods when the values of the hypothetical gradient and the range of body sizes are changed.")
+         caption = "Table S2. Deviation of estimates across methods when the values of the hypothetical gradient (large x) and the range of body sizes (small m) are changed.")
 ```
 
 
