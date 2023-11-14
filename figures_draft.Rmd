@@ -50,15 +50,18 @@ knitr::opts_chunk$set(
 library(tidyverse)
 ```
 
+![Figure 1. Conceptual figure of the simulation procedure used in experiment 2. A) we set $\lambda$ (points) to vary at a known relationship ($\beta$, dashed line). B) Using known values of $\lambda$, we sampled 999 body sizes for each site. C) We estimated site-specific $\lambda$ using the three methods (ELbn, L2n, MLE, see main text) and plotted them across the hypothetical environmental gradient (points, colored by method). D) We then estimated $\beta$ using OLS regressions for each method separately (colored lines). E) We repeated A-D 1,000 times to get a distribution of $\beta$ estimates. F) We compared the distribution of $\beta$ estimates (colored density plots) with the known values of $\beta$ (dashed vertical line).](conceptual.png)
 
 
-![Figure 1. Distribution of Lambda estimates by method (color) from random samples of body sizes from bounded power law distributions with varying exponents (-2.5 to -0.5). The figure is facetted by the known lambda parameter (facet title) and is also shown as the dashed line in each facet. Note that the x-axis varies in each facet.](figures/est_lambda_est_b_density.png)
+![Figure 2. Distribution of Lambda estimates by method (color) from random samples of body sizes from bounded power law distributions with varying exponents (-2.5 to -0.5). The figure is facetted by the known lambda parameter (facet title) and is also shown as the dashed line in each facet. Note that the x-axis varies in each facet.](figures/est_lambda_est_b_density.png)
 
-![Figure 2. Distribution of relationship estimates ($\beta_{env}$) in three different "windows" of lambda values. The dashed vertical line is the known relationship value of -0.5.](figures/lambda_angle_plot.png)
+![Figure 3. Distribution of relationship estimates ($\beta_{env}$) in three different "scenarios" of lambda values; steep: $\lamba$ = -2.5 to -1.5; medium: $\lamba$ = -2.0 to -1.0; steep: $\lamba$ = -1.5 to -0.5. The dashed vertical line is the known relationship value of -0.5.](figures/lambda_angle_plot.png)
 
-![Figure 3. Individual regressions by method (columns) for three different known relationship values (rows from bottom to top): 0, 0.25, and 0.5. There were a total of 1000 replicates simulated, but only 100 replicates are plotted here with `alpha = 0.05` to illustrate the variability in the regression lines.](figures/vary_beta_plot.png)
+![Figure 4. Individual regressions by method (columns) for three different known relationship values (rows from bottom to top, red dashed line). There were a total of 1000 replicates simulated for each combination of method and known relationship, but only 500 are plotted here to illustrate the variability in the regression lines.](figures/vary_beta_plot.png)
 
-![Figure 4. Distribution of relationship estimates ($\beta_{env}$) when estimating from different known relationships](figures/vary_beta_density_plot.png)
+![Figure 5. Distribution of relationship estimates ($\beta_{env}$) when estimating from different known relationships](figures/vary_beta_density_plot.png)
 
 
-![Figure 5. Estimates of change in exponent for size-abundance relationships across gradients from empirical data estimates. Panels A and C show the individual λ estimates for each site and the the line shows the estimated relationship based on method (color) for the natural pollution and temperature gradients, respectively. Panels B and D show the mean estimated relationship coefficient ($\beta$, point) ± 1 standard deviation (error bars) from the OLS model for both empirical data sets. All the methods estimate the same sign of the relationship, but the estimates from the binning methods are generally larger than the MLE estimates.](figures/empirical_combined.png)
+![Figure 6. Estimates of change in exponent for size-abundance relationships across gradients from empirical data estimates. Panels A and C show the individual λ estimates for each site and the line shows the estimated relationship based on method (color) for the natural pollution and temperature gradients, respectively. Panels B and D show the mean estimated relationship coefficient ($\beta$, point) ± 1 standard deviation (error bars) from the OLS model for both empirical data sets. All the methods estimate the same sign of the relationship, but the estimates from the binning methods are generally larger than the MLE estimates.](figures/empirical_combined.png)
+
+![Figure 7. Decision tree to aid researchers in choosing an analytical framework for estimating Individual Size Distributions. Major pros and cons of each framework are included. ](decision_tree.png)
