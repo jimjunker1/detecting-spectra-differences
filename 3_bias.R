@@ -92,7 +92,7 @@ bias_table = all_dat %>%
             sd_abs_bias = sd(abs_bias)) %>% 
   arrange(target_name, median_ci_range)
 
-write_csv(bias_table, file = "tables/bias_table.csv")
+#write_csv(bias_table, file = "tables/bias_table.csv")
 
 
 all_dat %>% 
@@ -110,3 +110,108 @@ all_dat %>%
   NULL
   
 
+# proportion of 95% CI with target ####
+lambda_ci_prop <- est_lambda %>%
+  select(known_b, rep, estimate, minCI, maxCI, name) %>%
+  mutate(in_ci = known_b > minCI & known_b < maxCI) %>%
+  na.omit() %>%
+  group_by(name) %>%
+  summarize(count = n(),
+            proportion = sum(in_ci, na.rm = TRUE) / count) %>%
+  mutate(target_name = "Lambda")
+
+beta_ci_prop <- angles %>%
+  select(known_relationship, rep, estimate, minCI, maxCI, name, id) %>%
+  mutate(in_ci = known_relationship > minCI & known_relationship< maxCI) %>%
+  na.omit() %>%
+  group_by(name) %>%
+  summarize(count = n(),
+            proportion = sum(in_ci, na.rm = TRUE) / count) %>%
+  mutate(target_name = "lambda scenarios")
+
+rel_beta_ci_prop <- rel_data_summary %>%
+  select(known_relationship, rep, estimate, minCI, maxCI, name) %>%
+  mutate(in_ci = known_relationship > minCI & known_relationship< maxCI) %>%
+  na.omit() %>%
+  group_by(name) %>%
+  summarize(count = n(),
+            proportion = sum(in_ci, na.rm = TRUE) / count) %>%
+  mutate(target_name = "Varying beta")
+
+beta_props <- bind_rows(beta_ci_prop, rel_beta_ci_prop) %>%
+  group_by(name) %>%
+  summarise(count = sum(count), 
+            proportion = mean(proportion)) %>%
+  mutate(target_name = "Regression Slope")
+
+
+
+ci_prop <- bind_rows(lambda_ci_prop, beta_props)
+
+table <- left_join(bias_table, ci_prop)
+write_csv(table, file = "tables/bias_table.csv")
+
+# plot of 95% CI's ####
+# estimated lambda
+est_lambda %>%
+  filter(rep < 500) %>%
+  select(known_b, rep, estimate, minCI, maxCI, name) %>%
+  group_by(name, known_b) %>%
+  mutate(in_ci = known_b > minCI & known_b < maxCI,
+         rank = rank(minCI)) %>%
+  na.omit() %>%
+  ggplot(aes(x = estimate, 
+             xmin = minCI, 
+             xmax = maxCI,
+             color = in_ci,
+             y = rank)) +
+  geom_linerange() +
+  facet_wrap(known_b~name,
+             scales = "free") +
+  theme_bw()
+
+ggsave("figures/lamba_ci_true.png",
+       width = 8,
+       height = 8)
+
+rel_data_summary %>%
+  filter(rep < 500) %>%
+  select(known_relationship, rep, estimate, minCI, maxCI, name) %>%
+  group_by(name, known_relationship) %>%
+  mutate(in_ci = known_relationship > minCI & known_relationship< maxCI,
+         rank = rank(minCI)) %>%
+  na.omit() %>%
+  ggplot(aes(x = estimate, 
+             xmin = minCI, 
+             xmax = maxCI,
+             color = in_ci,
+             y = rank)) +
+  geom_linerange() +
+  facet_wrap(known_relationship~name,
+             scales = "free") +
+  theme_bw()
+
+ggsave("figures/rel_data_ci_true.png",
+       width = 8,
+       height = 8)
+
+angles %>%
+  filter(rep < 500) %>%
+  select(known_relationship, rep, estimate, minCI, maxCI, name, id) %>%
+  group_by(name, known_relationship) %>%
+  mutate(in_ci = known_relationship > minCI &
+           known_relationship < maxCI,
+         rank = rank(minCI)) %>%
+  na.omit() %>%
+  ggplot(aes(xmin = minCI, 
+             xmax = maxCI,
+             color = in_ci,
+             y = rank)) +
+  geom_linerange() +
+  facet_wrap(id~name,
+             scales = "free") +
+  theme_bw()
+
+ggsave("figures/angles_ci_true.png",
+       width = 8,
+       height = 8)
