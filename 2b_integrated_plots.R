@@ -36,9 +36,7 @@ angles <- bind_rows(steep = angle_A,
 
 saveRDS(angles, file = "data_sim/angles.rds")
 
-##### Need to chnage order of legend to be L2n, ELBn, MLE ####
-
-
+# figure 3 ####
 (lambda_window <- angles %>%
   mutate(
     Model = case_when(name == "NAS" ~ "L2n", .default = name),
@@ -85,29 +83,41 @@ rel_data <- bind_rows(beta_0 = rel_0,
 saveRDS(rel_data, file = "data_sim/rel_data.rds")
 
 
+# figure 4 ####
 ###### Flip facet-wrap rows, top = 0, bottom = -0.5
+
+ab_data <- data.frame(
+  slope = c(0, -0.25, -0.5),
+  intercept = -1.5,
+  known_relationship = c(0, -0.25, -0.5)
+)
+
+ab_data <- ab_data %>%
+  expand_grid(method = c("MLE", "ELBn", "L2N"))
+
 rel_data %>%
   filter(rep<=100) %>%
   mutate(
     Model = case_when(name == "NAS" ~ "L2n", .default = name),
     Model = factor(Model,
                    levels = 
-                     c("MLE",
-                       "ELBn", 
-                       "L2n")),
+                     c("L2n",
+                       "ELBn",
+                       "MLE"
+                       )),
     # set levels of known relaitonship for facet_wrap() plotting order below
     known_relationship = factor(known_relationship,
                                 levels = c("0", "-0.25", "-0.5"))) %>%
-  filter(rep <= 100) %>%
+  filter(rep <= 500) %>%
   ggplot(aes(x = env_gradient,
              y = estimate, 
              group = rep,
              color = Model)) +
   scale_color_manual(
-    values = c("#019AFF", "#FF914A", "#FF1984" )) +
+    values = c("#FF1984", "#FF914A", "#019AFF")) +
   stat_smooth(geom = "line",
               method = "lm",
-              alpha = 0.05,
+              alpha = 0.15,
               se = FALSE, 
               color = "black") +
   geom_point(alpha = 0.1) +
@@ -115,6 +125,12 @@ rel_data %>%
   theme_bw() +
   theme(legend.position="none") +
   labs(x = "Hypothetical environemntal gradient") +
+  geom_abline(data = ab_data,
+              aes(intercept = intercept, slope = known_relationship),
+              color = "red",
+              linetype = "dashed",
+              linewidth = 1.25,
+              alpha = 0.75)+
   NULL
 
 ggsave(filename = "figures/vary_beta_plot.png",
@@ -129,6 +145,7 @@ rel_data_summary = rel_data %>% calc_relationship_estimate(.)
 
 saveRDS(rel_data_summary, file = "data_sim/rel_data_summary.rds")
 
+# Fig 5 ####
 rel_data_summary %>%
   mutate(
     Model = case_when(name == "NAS" ~ "L2n", .default = name),
@@ -162,7 +179,8 @@ ggsave(filename = "figures/vary_beta_density_plot.png",
        height = 6,
        width = 6)
 
-## export one plot as pdf for inkscape practice
+
+## export one plot as pdf for inkscape practice ####
 rel_data_summary %>%
   filter(known_relationship == -0.5) %>%
   mutate(Model = factor(name,
@@ -191,7 +209,7 @@ rel_data_summary %>%
   NULL 
 
 # export this figure using the plot window
-
+# Figure 2 #### 
 est_lambda %>%
   mutate(
     Model = case_when(name == "NAS" ~ "L2n", .default = name),
@@ -218,12 +236,117 @@ est_lambda %>%
   labs(
     x = "Lambda estimate") +
   facet_wrap(~known_b, scales = "free") +
+  scale_x_continuous(labels = scales::label_number(accuracy = 0.1)) +
   scale_y_discrete(breaks=c("MLE",
                             "ELBn", 
                             "NAS"),
                    labels= NULL)
 
 ggsave(filename = "figures/est_lambda_est_b_density.png",
+       units = "in", 
+       height = 6,
+       width = 6)
+
+# top panel of figure 2 ####
+# add as an SI figure
+est_lambda %>%
+  mutate(
+    Model = case_when(name == "NAS" ~ "L2n", .default = name),
+    Model = factor(Model,
+                   levels = 
+                     c("MLE",
+                       "ELBn", 
+                       "L2n"))) %>%
+  filter(known_b == -2.5 |
+           known_b == -2.25 |
+           known_b == -2 ) %>%
+  ggplot(
+    aes(x = estimate, 
+        y = Model,
+        fill = Model)) +
+  stat_halfeye(.width = c(0.66, 0.95)) +
+  scale_fill_manual(
+    values = c("#FF1984",
+               "#FF914A",
+               "#019AFF"),
+    breaks = c("L2n",
+               "ELBn", 
+               "MLE")) +
+  theme_bw() +
+  geom_vline(aes(xintercept = known_b),
+             linetype = "dashed") +
+  labs(
+    x = "Lambda estimate") +
+  facet_wrap(~known_b, scales = "free") +
+  scale_x_continuous(labels = scales::label_number(accuracy = 0.1)) +
+  scale_y_discrete(breaks=c("MLE",
+                            "ELBn", 
+                            "NAS"),
+                   labels= NULL)
+ggsave(filename = "figures/SI_fig2_top_panel.png",
+       units = "in", 
+       height = 6,
+       width = 6)
+
+
+# replicates for SI #### 
+
+angles2 <- angles %>%
+   mutate(
+     Model = case_when(name == "NAS" ~ "L2n", .default = name),
+     Model = factor(Model,
+                    levels = 
+                      c("MLE",
+                        "ELBn", 
+                        "L2n")),
+     sim = factor(id, 
+                  levels = c("steep", 
+                             "medium", 
+                             "shallow"))) %>%
+  filter(known_relationship == -0.5)
+
+# subsample pipeline
+angles2 %>%
+  group_by(sim) %>%
+  filter(rep <= 10) %>%
+  mutate(rep_n = 10)
+
+angles_list <- list()
+
+rep_n <- c(10, 50, 100, 200, 250, 500, 750, 1000)
+for (i in 1:length(rep_n)){
+  j = rep_n[i]
+  out <- angles2 %>%
+    group_by(sim) %>%
+    filter(rep <= j) %>%
+    mutate(rep_n = j)
+    angles_list[[i]] <- out
+}
+
+angles_list %>%
+  bind_rows() %>%
+  ggplot(aes(x = rep_n,
+             y = estimate,
+             color = Model))+
+  stat_pointinterval(position = "dodge") +
+  scale_color_manual(
+    values = c("#FF1984",
+               "#FF914A",
+               "#019AFF"),
+    breaks = c("L2n",
+               "ELBn", 
+               "MLE")) +
+  theme_bw() +
+  geom_hline(
+    aes(yintercept = known_relationship),
+    linetype = "dashed") +
+  labs(x = "Relationship estimate") +
+  facet_wrap(sim~., 
+             ncol = 1,
+             scales = "free_y") +
+  NULL
+
+ggsave(filename = "figures/SI_vary_rep_n.png",
        units = "in", 
        height = 6,
        width = 6)
