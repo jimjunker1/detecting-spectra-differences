@@ -5,6 +5,8 @@ library(sizeSpectra) #bounded power law and MLE functions
 source("custom_functions.R")
 library(tidybayes)
 
+
+
 # body values sample size ####
 
 # read in datasets with variable sample size, n
