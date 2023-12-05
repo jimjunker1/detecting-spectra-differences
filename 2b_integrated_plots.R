@@ -180,35 +180,6 @@ ggsave(filename = "figures/vary_beta_density_plot.png",
        width = 6)
 
 
-## export one plot as pdf for inkscape practice ####
-rel_data_summary %>%
-  filter(known_relationship == -0.5) %>%
-  mutate(Model = factor(name,
-                        levels = 
-                          c("MLE",
-                            "ELBn", 
-                            "NAS"))) %>%
-  ggplot(aes(x = estimate, 
-             y = Model,
-             fill = Model))+
-  stat_halfeye(.width = c(0.66, 0.95)) +
-  scale_fill_manual(
-    values = c("#FF1984",
-               "#FF914A",
-               "#019AFF"),
-    breaks = c("L2n",
-               "ELBn", 
-               "MLE")) +
-  theme_bw() +
-  geom_vline(
-    aes(xintercept = known_relationship),
-    linetype = "dashed") +
-  labs(x = "Relationship estimate") +
-  facet_wrap(known_relationship~., 
-             ncol = 1) +
-  NULL 
-
-# export this figure using the plot window
 # Figure 2 #### 
 est_lambda %>%
   mutate(
