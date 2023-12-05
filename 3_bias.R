@@ -92,8 +92,6 @@ bias_table = all_dat %>%
             sd_abs_bias = sd(abs_bias)) %>% 
   arrange(target_name, median_ci_range)
 
-#write_csv(bias_table, file = "tables/bias_table.csv")
-
 
 all_dat %>% 
   mutate(conf_width = maxCI - minCI,
