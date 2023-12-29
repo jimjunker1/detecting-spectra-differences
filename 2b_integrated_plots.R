@@ -311,7 +311,7 @@ angles_list %>%
   geom_hline(
     aes(yintercept = known_relationship),
     linetype = "dashed") +
-  labs(x = "Relationship estimate") +
+  labs(x = "Number of replicates") +
   facet_wrap(sim~., 
              ncol = 1,
              scales = "free_y") +
